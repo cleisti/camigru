@@ -1,0 +1,34 @@
+html {
+	scroll-behavior: smooth;
+}
+* {
+	box-sizing: border-box;
+}
+body {
+	background-color: azure;
+}
+#container {
+	display: flex;
+	position: relative;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	margin: auto;
+	padding: 1em;
+}
+#container > .middle {
+	padding: 1em;
+	flex: 1;
+	align-content: center;
+}
+#container > .side {
+	padding: 1em;
+	flex: 0 0 20vw;
+}
+header, footer {
+	padding: 0.5em;
+	background-color: burlywood;
+}
+h1 {
+	text-align: center;
+}
