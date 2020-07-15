@@ -22,7 +22,7 @@
 
     function    user_exists($username) {
         $check_user = "SELECT username FROM users
-                    WHERE username = ':name;'";
+                    WHERE username = :username;";
         
         $stmt = $pdo->prepare($check_user);
         $stmt->bindParam(':name', $username);
@@ -41,16 +41,12 @@
     function    create_user($username, $passwd) {
         $hashed = hash(whirlpool, $passwd);
         $sql_insert = "INSERT INTO users(`username`, `password`)
-                    VALUES ('$username', '$hashed');";
+                    VALUES (':username', ':password');";
         
-        try {
-            $stmt = $pdo->prepare($sql_insert);
-            $stmt->exec($sql_insert);
-            echo "User created";
-        }
-        catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
-        }
+        $stmt = $pdo->prepare($sql_insert);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $passwd);
+        $stmt->execute();
     }
 
     // create validation functions for username and password && validate them first with filter_var
