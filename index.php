@@ -23,7 +23,7 @@
 			}
 			else {
 				?>
-				<p>link to profile page</p>
+				<a href="index.php?page=profile">Profile</a>
 				<a href="index.php?page=account/logout">Log out</a>
 				<?php
 			}

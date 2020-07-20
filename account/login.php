@@ -3,13 +3,14 @@
 	<head>
 	</head>
 	<body>
-		<h2>Login</h2>
+		<h2>Log in</h2>
 		<form action="" method="post">
 			Username: <input type="text" name="login" value="" />
 			<br />
 			Password: <input type="password" name="passwd" value="" />
 			<input class="button" type="submit" name="connect" value="Log in" />
 		</form>
+		<a href="index.php?page=reset_pass">Forgot your password?</a>
 	</body>
 </html>
 
