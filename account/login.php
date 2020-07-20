@@ -8,9 +8,9 @@
 			Username: <input type="text" name="login" value="" />
 			<br />
 			Password: <input type="password" name="passwd" value="" />
-			<input class="button" type="submit" name="connect" value="Log in" />
+			<input type="submit" name="connect" value="Log in" />
 		</form>
-		<a href="index.php?page=reset_pass">Forgot your password?</a>
+		<a href="index.php?page=account/reset_pass">Forgot your password?</a>
 	</body>
 </html>
 
@@ -24,19 +24,26 @@
 
 	function    auth($username, $passwd, $pdo) {
 		try {
-			$get_hash = "SELECT `password` FROM users
+			$get_hash = "SELECT `password`, `verified` FROM users
 						WHERE username = :username;";
 
 			$stmt = $pdo->prepare($get_hash);
 			$stmt->execute(array(':username' => $username));
 			$res = $stmt->fetch(PDO::FETCH_ASSOC);
+			$v = $res['verified'];
 			$hash = $res['password'];
+			echo $v;
 
-			if (password_verify($passwd, $hash)) {
-				return TRUE;
+			if ($v !== '1') {
+				echo "You haven't activated your account yet.<br>Follow the link that has been sent to your email or<br>send a new link.";
+				return FALSE;
+			}
+			else if (!password_verify($passwd, $hash)) {
+				echo "Wrong username or password.";
+				return FALSE;
 			}
 			else {
-				return FALSE;
+				return TRUE;
 			}
 		}
 		catch (PDOException $e) {
@@ -54,9 +61,6 @@
 		}
 		else {
 			$_SESSION['logged_user'] = "";
-			?>
-			<p>ERROR: Wrong username or password.</p>
-			<?php
 		}
 	}
 ?>

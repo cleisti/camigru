@@ -11,7 +11,7 @@
             Password: <input type="password" name="passwd" minlength="8" maxlength="20" value="" required />
             <br />
             Validate password: <input type="password" name="validate_pw" minlength="8" maxlength="20" value="" required />
-            <input class="button" type="submit" name="submit" value="Create" />
+            <input type="submit" name="submit" value="Create" />
         </form>
         <br />
     </body>
@@ -19,6 +19,7 @@
 
 <?php
     include '../config/connect.php';
+    include 'user_exists.php';
     session_start();
 
     $submit = $_POST['submit'];
@@ -26,40 +27,6 @@
     $username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     $passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     $validate_pw = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-
-    function    user_exists($email, $username, $pdo) {
-        try {
-            $check_user = "SELECT username FROM users
-                    WHERE username = :username;";
-        
-            $stmt = $pdo->prepare($check_user);
-            $stmt->execute(array(':username' => $username));
-            $res = $stmt->fetch();
-        }
-        catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage;
-        }
-        if ($res) {
-            echo "User already exists.";
-            return TRUE;
-        }
-        try {
-            $check_email = "SELECT email FROM users
-                    WHERE email = :email;";
-            
-            $stmt = $pdo->prepare($check_email);
-            $stmt->execute(array(':email' => $email));
-            $res = $stmt->fetch();
-        }
-        catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage;
-        }
-        if ($res) {
-            echo "This email is already in use on another account.";
-            return TRUE;
-        }
-        return FALSE;
-    }
 
     function    input_is_valid($email, $username, $passwd, $validate_pw) {
 
@@ -90,9 +57,11 @@
                     WHERE email = :email LIMIT 1;";
             $stmt = $pdo->prepare($get_id);
             $stmt->execute(array(':email' => $email));
-            $id = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($id['user_id']) {
-                $url = 'http://localhost:8080/camigru/account/verify.php?token=' . $token .'&id=' . $id['user_id'];
+            $res = $stmt->fetch(PDO::FETCH_ASSOC);
+            $id = $res['user_id'];
+
+            if ($id) {
+                $url = 'http://localhost:8080/camigru/index.php?page=account/verify&token=' . $token .'&id=' . $id;
                 $subject = "Activate your account at Camigru";
                 $content = "Click this link to activate your account: " . $url;
                 $headers = 'From: admin@camigru.com' . "\r\n";

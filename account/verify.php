@@ -8,30 +8,29 @@
 
 <?php
 	include '../config/connect.php';
+
 	if (isset($_GET['token']) && isset($_GET['id'])) {
+
 		$pdo = connect();
 
-		$token = trim($_GET['token']);
-		$id = trim($_GET['user']);
-		
+		$token = filter_var($_GET['token'], FILTER_SANITIZE_STRING);
+		$id = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+	
 		try {
-			$sql = "SELECT COUNT(*) AS num FROM users WHERE user_id = :id AND token = :token;";
-			$stmt = $pdo->prepare($sql);
+			$get_user = "SELECT user_id FROM users WHERE user_id = :id AND token = :token;";
+			$stmt = $pdo->prepare($get_user);
 			$stmt->execute(array(':id' => $id, ':token' => $token));
-		
+
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-			$stmt->close();
-			if ($result['num'] == 1){
-				try {
-					$validate = "UPDATE users WHERE user_id = :id SET verified = '1;";
-					$stmt = $pdo->prepare($validate);
-					$stmt->execute(array(':id' => $id));
-					$stmt->close;
-					echo "Validation successfull. Log in.";
-				}
-				catch (PDOException $e) {
-					echo "ERROR: " . getMessage();
-				}
+
+			if ($result['user_id'] === $id) {
+				$validate = "UPDATE users
+							SET verified = :v
+							WHERE user_id = :id;";
+				$stmt = $pdo->prepare($validate);
+				$stmt->execute(array(':v' => 1, ':id' => $id));
+				$stmt->close();
+				echo "Validation successfull. Log in.";
 			}
 			else {
 				echo "Unable to validate email.";
