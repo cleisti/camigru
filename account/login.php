@@ -17,35 +17,45 @@
 	include '../config/connect.php';
 	session_start();
 
-	$pdo = connect();
+	$submit = $_POST['connect'];
+	$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+	$passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
-	function    auth($login, $passwd) {
-		$hashed = hash(whirlpool, $passwd);
-		$sql_validate = "SELECT `username`, `password` FROM users
-					WHERE `username` = " . $pdo->quote($login) . "
-					AND `password` = " . $pdo->quote($hashed) . "
-					LIMIT 1;";
+	function    auth($username, $passwd, $pdo) {
+		try {
+			$get_hash = "SELECT `password` FROM users
+						WHERE username = :username;";
 
-		$que = $pdo->query($sql_validate);
+			$stmt = $pdo->prepare($get_hash);
+			$stmt->execute(array(':username' => $username));
+			$res = $stmt->fetch(PDO::FETCH_ASSOC);
+			$hash = $res['password'];
 
-		$res = $que->fetch(PDO::FETCH_ASSOC);
+			if (password_verify($passwd, $hash)) {
+				return TRUE;
+			}
+			else {
+				return FALSE;
+			}
+		}
+		catch (PDOException $e) {
+			echo "ERROR: " . getMessage($e);
+		}
+	}
 
-		if ($res !== FALSE) {
-			return TRUE;
+	if ($submit === 'Log in') {
+		
+		$pdo = connect();
+
+		if (auth($username, $passwd, $pdo) === TRUE) {
+			$_SESSION['logged_user'] = $username;
+			header("Location: index.php");
 		}
 		else {
-			return FALSE;
+			$_SESSION['logged_user'] = "";
+			?>
+			<p>ERROR: Wrong username or password.</p>
+			<?php
 		}
-	}
-
-	if (auth($_POST['login'], $_POST['passwd']) === TRUE) {
-		$_SESSION['logged_user'] = $_POST['login'];
-		header("Location: index.php");
-	}
-	else {
-		$_SESSION['logged_user'] = "";
-		?>
-		<p>ERROR: Wrong username or password.</p>
-		<?php
 	}
 ?>

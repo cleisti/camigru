@@ -9,6 +9,8 @@
 		`email` VARCHAR(100) NOT NULL,
 		`username` VARCHAR(25) NOT NULL,
 		`password` VARCHAR(255) NOT NULL,
+		`verified` TINYINT(1) NOT NULL DEFAULT '0',
+		`token` VARCHAR(255) DEFAULT NULL,
 		PRIMARY KEY (`user_id`)
 	);";
 

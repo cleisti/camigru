@@ -18,12 +18,13 @@
 			if (!$user || $user == "") {
 				?>
 				<a href="index.php?page=account/create">Create account</a><br />
-				<a href="index.php?page=account/login">Login</a>
+				<a href="index.php?page=account/login">Log in</a>
 				<?php
 			}
 			else {
 				?>
 				<p>link to profile page</p>
+				<a href="index.php?page=account/logout">Log out</a>
 				<?php
 			}
 			?>
