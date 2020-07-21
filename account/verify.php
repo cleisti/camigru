@@ -25,10 +25,10 @@
 
 			if ($result['user_id'] === $id) {
 				$validate = "UPDATE users
-							SET verified = :v
+							SET verified = :v, token = :zero
 							WHERE user_id = :id;";
 				$stmt = $pdo->prepare($validate);
-				$stmt->execute(array(':v' => 1, ':id' => $id));
+				$stmt->execute(array(':v' => 1, ':zero' => 0, ':id' => $id));
 				$stmt->close();
 				echo "Validation successfull. Log in.";
 			}

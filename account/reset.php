@@ -16,9 +16,6 @@
 	include '../config/connect.php';
 
 	$submit = $_POST['submit'];
-	$id = filter_var($_GET['id'], FILTER_SANITIZE_STRING, FILTER_FLAG, STRIP_LOW);
-	$new_pw = filter_var($_POST['new_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-	$validate_pw = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
 	function	reset_password($id, $new_pw, $pdo) {
 		try {
@@ -28,14 +25,19 @@
 					WHERE user_id = :id;";
 			$stmt = $pdo->prepare($reset);
 			$stmt->execute(array(':id' => $id, 'password' => $hashed));
-			echo "Password reset.";
+			echo "Password reset. Redirecting to login page . . .";
 		}
 		catch (PDOException $e) {
 			echo "ERROR: " . getMessage($e);
 		}
 	}
 
-	if ($submit === 'Reset' && $new_pw && $validate_pw) {
+	if ($submit === 'Reset' && isset($_POST['id']) && isset($_POST['new_pw']) && isset($_POST['validate_pw'])) {
+
+		$id = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+		$new_pw = filter_var($_POST['new_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+		$validate_pw = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+
 		if ($new_pw !== $validate_pw) {
 			echo "Password doesn't match validation.";
 		}

@@ -99,6 +99,7 @@
         }
         if (send_mail($email, $token, $pdo)) {
             echo "Activation email sent to $email. Follow the link to activate your account.";
+            $stmt->close();
         }
     }
 

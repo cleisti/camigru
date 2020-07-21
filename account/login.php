@@ -19,8 +19,6 @@
 	session_start();
 
 	$submit = $_POST['connect'];
-	$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-	$passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
 	function    auth($username, $passwd, $pdo) {
 		try {
@@ -32,7 +30,7 @@
 			$res = $stmt->fetch(PDO::FETCH_ASSOC);
 			$v = $res['verified'];
 			$hash = $res['password'];
-			echo $v;
+			$stmt->close();
 
 			if ($v !== '1') {
 				echo "You haven't activated your account yet.<br>Follow the link that has been sent to your email or<br>send a new link.";
@@ -51,9 +49,12 @@
 		}
 	}
 
-	if ($submit === 'Log in') {
+	if ($submit === 'Log in' && isset($_POST['login']) && isset($_POST['passwd'])) {
 		
 		$pdo = connect();
+
+		$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+		$passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
 		if (auth($username, $passwd, $pdo) === TRUE) {
 			$_SESSION['logged_user'] = $username;

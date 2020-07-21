@@ -19,8 +19,6 @@
 	session_start();
 
 	$submit = $_POST['send'];
-	$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-	$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
 	function    user_exists($email, $username, $pdo) {
 	
@@ -76,13 +74,13 @@
 
 	function    send_reset_link($email, $pdo) {
         try {
-            $get_id = "SELECT user_id, token FROM users
+            $get_id = "SELECT user_id FROM users
                     WHERE email = :email LIMIT 1;";
             $stmt = $pdo->prepare($get_id);
             $stmt->execute(array(':email' => $email));
 			$res = $stmt->fetch(PDO::FETCH_ASSOC);
 			$id = $res['user_id'];
-			$token = $res['token'];
+			$token = bin2hex(openssl_random_pseudo_bytes(16));
 
             if ($id && $token) {
                 $url = 'http://localhost:8080/camigru/index.php?page=account/reset&token=' . $token .'&id=' . $id;
@@ -91,11 +89,15 @@
                 $headers = 'From: admin@camigru.com' . "\r\n";
                 if (mail($email, $subject, $content, $headers))
                 {
-					echo "Email sent";
+					$set_token = "UPDATE users SET token = :token WHERE user_id = :id;";
+					$stmt = $pdo->prepare($set_token);
+					$stmt->execute(array(':token' => $token, ':id' => $id));
+					$stmt->close;
+					echo "Activation link sent to $email.";
 					return (1);
                 }
                 else {
-                    echo "Unable to reset password.";
+                    echo "Unable to send activation link.";
                     return (0);
                 }
             }
@@ -108,9 +110,12 @@
         }
     }
 
-	if ($submit === 'Send' && ($email || $username)) {
+	if ($submit === 'Send' && (isset($_POST['email']) || isset($_POST['login']))) {
 		
 		$pdo = connect();
+
+		$email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+		$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
 		if (user_exists($email, $username, $pdo)) {
 			if ($email === "") {
