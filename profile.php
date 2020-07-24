@@ -53,7 +53,6 @@
             $stmt->execute(array(':file_src' => $target_file, ':id' => $id));
 
             move_uploaded_file($_FILES['image']['tmp_name'], $target_dir.$name);
-            $profile_pic = $target_file;
         }
     }
 
@@ -66,10 +65,8 @@
 
 </head>
     <body>
-    <img src="<?php
-                if ($profile_pic)
-                    echo $profile_pic
-                ?>"> <?php echo $profile_pic ?>
+    <img src="<?php if ($profile_pic)
+                        echo $profile_pic ?>">
     <form action="" method="post" enctype="multipart/form-data">
         Upload a new picture:<br />
         <input type="file" name="image" id="fileToUpload"><br />

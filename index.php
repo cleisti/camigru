@@ -14,6 +14,7 @@
 	</head>
 	<body>
 		<header>
+			<a href="index.php">Gallery</a>
 		<?php
 			if (!$user || $user == "") {
 				?>
@@ -24,6 +25,7 @@
 			else {
 				?>
 				<a href="index.php?page=profile">Profile</a>
+				<a href="index.php?page=upload">New image</a>
 				<a href="index.php?page=account/logout">Log out</a>
 				<?php
 			}
