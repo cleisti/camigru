@@ -27,18 +27,18 @@
 				<a href="index.php?page=account/logout">Log out</a>
 				<?php
 			}
-			?>
+		?>
 		</header>
 		<div id="container">
 			<div class="side">
 			</div>
 			<div class="middle">
 				<?php
-				if (isset($_GET['page']) && $_GET['page'] != '')
-					$page = $_GET['page'];
-				else
-					$page = 'home';
-				include($page.'.php');
+					if (isset($_GET['page']) && $_GET['page'] != '')
+						$page = $_GET['page'];
+					else
+						$page = 'home';
+					include($page.'.php');
 				?>
 			</div>
 			<div class="side">

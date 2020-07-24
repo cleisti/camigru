@@ -16,6 +16,7 @@
 
 <?php
 	include '../config/connect.php';
+	include 'validation.php';
 	session_start();
 
 	$submit = $_POST['connect'];
@@ -30,7 +31,6 @@
 			$res = $stmt->fetch(PDO::FETCH_ASSOC);
 			$v = $res['verified'];
 			$hash = $res['password'];
-			$stmt->close();
 
 			if ($v !== '1') {
 				echo "You haven't activated your account yet.<br>Follow the link that has been sent to your email or<br>send a new link.";
@@ -56,12 +56,14 @@
 		$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 		$passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 
-		if (auth($username, $passwd, $pdo) === TRUE) {
-			$_SESSION['logged_user'] = $username;
-			header("Location: index.php");
+		if (user_exists(NULL, $username, $pdo)) {
+			if (auth($username, $passwd, $pdo) === TRUE) {
+				$_SESSION['logged_user'] = $username;
+				header("Location: index.php");
+			}
 		}
 		else {
-			$_SESSION['logged_user'] = "";
+			echo "<br><br>User " . $username . " doesn't exist.";
 		}
 	}
 ?>

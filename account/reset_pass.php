@@ -16,47 +16,10 @@
 
 <?php
 	include '../config/connect.php';
+	include 'validation.php';
 	session_start();
 
 	$submit = $_POST['send'];
-
-	function    user_exists($email, $username, $pdo) {
-	
-		if ($email) {
-			try {
-				$check_email = "SELECT email FROM users
-						WHERE email = :email;";
-	
-				$stmt = $pdo->prepare($check_email);
-				$stmt->execute(array(':email' => $email));
-				$res = $stmt->fetch();
-			}
-			catch (PDOException $e) {
-				echo "ERROR: " . $e->getMessage;
-			}
-			if ($res) {
-				return TRUE;
-			}
-		}
-		
-		if ($username) {
-			try {
-				$check_user = "SELECT username FROM users
-						WHERE username = :username;";
-	
-				$stmt = $pdo->prepare($check_user);
-				$stmt->execute(array(':username' => $username));
-				$res = $stmt->fetch();
-			}
-			catch (PDOException $e) {
-				echo "ERROR: " . $e->getMessage;
-			}
-			if ($res) {
-				return TRUE;
-			}
-		}
-		return FALSE;
-	}
 
 	function	get_email($username, $pdo) {
 		try {
@@ -80,18 +43,18 @@
             $stmt->execute(array(':email' => $email));
 			$res = $stmt->fetch(PDO::FETCH_ASSOC);
 			$id = $res['user_id'];
-			$token = bin2hex(openssl_random_pseudo_bytes(16));
+			$reset = bin2hex(openssl_random_pseudo_bytes(16));
 
-            if ($id && $token) {
-                $url = 'http://localhost:8080/camigru/index.php?page=account/reset&token=' . $token .'&id=' . $id;
+            if ($id && $reset) {
+                $url = 'http://localhost:8080/camigru/index.php?page=account/reset&reset=' . $reset .'&id=' . $id;
                 $subject = "Reset link";
                 $content = "Click this link to reset your password: " . $url;
                 $headers = 'From: admin@camigru.com' . "\r\n";
                 if (mail($email, $subject, $content, $headers))
                 {
-					$set_token = "UPDATE users SET token = :token WHERE user_id = :id;";
-					$stmt = $pdo->prepare($set_token);
-					$stmt->execute(array(':token' => $token, ':id' => $id));
+					$set_reset_token = "UPDATE users SET reset = :reset WHERE user_id = :id;";
+					$stmt = $pdo->prepare($set_reset_token);
+					$stmt->execute(array(':reset' => $reset, ':id' => $id));
 					$stmt->close;
 					echo "Activation link sent to $email.";
 					return (1);
@@ -100,7 +63,7 @@
                     echo "Unable to send activation link.";
                     return (0);
                 }
-            }
+			}
             else {
                 echo "Unable to find user.";
             }

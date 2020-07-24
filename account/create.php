@@ -18,8 +18,8 @@
 </html>
 
 <?php
-    include '../config/connect.php';
-    include 'user_exists.php';
+    include_once '../config/connect.php';
+    include_once 'account/validation.php';
     session_start();
 
     $submit = $_POST['submit'];
@@ -27,29 +27,6 @@
     $username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     $passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     $validate_pw = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-
-    function    input_is_valid($email, $username, $passwd, $validate_pw) {
-
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {        
-            if (preg_match('/[^a-zA-Z0-9_]/', $username)) {
-                echo "Username contains illegal characters.<br>Allowed characters are alphabetical characters, numerical characters and _.";
-                return (0);
-            }
-            if (!preg_match('/^(?=.*\d)(?=.*[a-zA-Z]).*[a-z0-9!?@#$%]$/', $passwd)) {
-                echo "Password must contain at least one alphabetical character and one number.<br>Special characters ?, !, @, #, $ and % are allowed.";
-                return (0);
-            }
-            if ($passwd !== $validate_pw) {
-                echo "Password doesn't match validation. Try again.";
-                return (0);
-            }
-            return (1);
-        }
-        else {
-            echo "Invalid email.";
-            return (0);
-        }
-    }
 
     function    send_mail($email, $token, $pdo) {
         try {
@@ -65,13 +42,12 @@
                 $subject = "Activate your account at Camigru";
                 $content = "Click this link to activate your account: " . $url;
                 $headers = 'From: admin@camigru.com' . "\r\n";
-                if (mail($email, $subject, $content, $headers))
-                {
-                    return (1);
+                if (mail($email, $subject, $content, $headers)) {
+                    return TRUE;
                 }
                 else {
                     echo "Unable to send activation email.";
-                    return (0);
+                    return FALSE;
                 }
             }
             else {
@@ -90,7 +66,6 @@
         $token = bin2hex(openssl_random_pseudo_bytes(16));
         $insert_user = "INSERT INTO users(`email`, `username`, `password`, `token`)
                     VALUES (:email, :username, :password, :token);";
-
         $stmt = $pdo->prepare($insert_user);
         $stmt->execute(array(':email' => $email, ':username' => $username, ':password' => $hashed, ':token' => $token));
         }
@@ -107,11 +82,15 @@
         
         $pdo = connect();
 
-        if (!user_exists($email, $username, $pdo)) {
+        if (!$mess = user_exists($email, $username, $pdo)) {
             if (input_is_valid($email, $username, $passwd, $validate_pw)) {
                 create_user($email, $username, $passwd, $pdo);
                 unset($_POST);
             }
         }
+        else {
+            echo $mess;
+        }
     }
+
 ?>

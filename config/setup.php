@@ -11,6 +11,8 @@
 		`password` VARCHAR(255) NOT NULL,
 		`verified` TINYINT(1) NOT NULL DEFAULT '0',
 		`token` VARCHAR(255) DEFAULT NULL,
+		`reset` VARCHAR(255) DEFAULT NULL,
+		`profile_pic` VARCHAR(80) NOT NULL,
 		PRIMARY KEY (`user_id`)
 	);";
 
