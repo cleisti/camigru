@@ -28,6 +28,7 @@ body {
 header, footer {
 	padding: 0.5em;
 	background-color: burlywood;
+	text-align: center;
 }
 h1 {
 	text-align: center;
