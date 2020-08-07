@@ -71,6 +71,7 @@
 		canvas.width = width;
 		canvas.height = height;
 		context.drawImage(video, 0, 0, width, height);
+		context.drawImage("http://localhost:8080/Camigru/stickers/sunglasses.png", 0, 0, 100, 250);
 	  
 		var data = canvas.toDataURL('image/png');
 

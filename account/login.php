@@ -49,6 +49,15 @@
 		}
 	}
 
+	function	get_user_id($username, $pdo) {
+		$get_id = "SELECT `user_id` FROM users WHERE username = :username;";
+		$stmt = $pdo->prepare($get_id);
+		$stmt->execute(array(':username' => $username));
+		$res = $stmt->fetch(PDO::FETCH_ASSOC);
+		$id = $res['user_id'];
+		return $id;
+	}
+
 	if ($submit === 'Log in' && isset($_POST['login']) && isset($_POST['passwd'])) {
 		
 		$pdo = connect();
@@ -59,6 +68,7 @@
 		if (user_exists(NULL, $username, $pdo)) {
 			if (auth($username, $passwd, $pdo) === TRUE) {
 				$_SESSION['logged_user'] = $username;
+				$_SESSION['user_id'] = get_user_id($username, $pdo);
 				header("Location: index.php");
 			}
 		}

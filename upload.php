@@ -2,6 +2,7 @@
 include_once 'config/connect.php';
 
 $username = $_SESSION['logged_user'];
+$id = $_SESSION['user_id'];
 $submit = $_POST['submit'];
 
 if ($submit === "Upload Image") {
@@ -16,6 +17,7 @@ if ($submit === "Upload Image") {
       mkdir($folderPath);
 
   $extensions_arr = array("jpg","jpeg","png","gif");
+
   if (in_array($imageFileType, $extensions_arr)) {
       if (move_uploaded_file($_FILES['img']['tmp_name'], $folderPath . $fileName)) {
         $pdo = connect();
@@ -40,6 +42,16 @@ if ($submit === "Upload Image") {
     echo "Wrong format";
 }
 
+try {
+  $fetch_images = "SELECT * FROM images WHERE img_user_id = :user_id ORDER BY created DESC;";
+  $stmt = $pdo->prepare($fetch_images);
+  $stmt->execute(array(':user_id' => $id));
+  $images = $stmt->fetchALL(PDO::FETCH_ASSOC);
+}
+catch (PDOException $e) {
+  echo "Error: " . getMessage($e);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -51,8 +63,11 @@ if ($submit === "Upload Image") {
 	</script>
 </head>
 <body>
-<div class="contentarea">
-  <h2>Create a new image</h2>
+<h2 style="text-align: center;">Create a new image</h2>
+<div class="contentArea" style="display: flex; justify-content: space-between;">
+    <div class="stickers" style="height: 300px;">
+      <img src="stickers/sunglasses.png" style="width: 100px">
+    </div>
     <div class="camera">
       <video id="video">Video stream not available.</video>
       <button id="startbutton">Take photo</button>
@@ -65,8 +80,18 @@ if ($submit === "Upload Image") {
         <input type="file" accept="image/*" name="img"><br />
         <input type="submit" value="Upload Image" name="submit">
   </form> -->
-  <div id="output">
+  <div id="output" style="max-height: 300px; width: 180px; overflow: scroll;">
   </div>
 </div>
+<h2 style="text-align: center;">Your images</h2>
+<div id="gallery">
+		<?php
+			foreach ($images as $img) {
+				if (file_exists($img['path'])) { ?>
+					<img style="width: 25%; margin: 10px;" id="<?$img['img_id']?>" src="<?=$img['path']?>" ondblclick="remove(this)">
+				<?php }
+			}
+		?>
+	</div>
 </body>
 </html>
