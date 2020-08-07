@@ -6,31 +6,35 @@ $submit = $_POST['submit'];
 
 if ($submit === "Upload Image") {
 
-  $name = $_FILES['img']['name'];
-  $target_dir = "images/";
-  $target_file = $target_dir . basename($_FILES["img"]["name"]);
-
+  $folderPath = "images/";
+  $target_file = $folderPath . basename($_FILES["img"]["name"]); // $folderPath needed?
   $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+  $fileName = uniqid() . $imageFileType;
+  $file = $folderPath . $fileName;
 
-  if (!file_exists($target_dir))
-      mkdir($target_dir);
+  if (!file_exists($folderPath))
+      mkdir($folderPath);
 
   $extensions_arr = array("jpg","jpeg","png","gif");
   if (in_array($imageFileType, $extensions_arr)) {
+      if (move_uploaded_file($_FILES['img']['tmp_name'], $folderPath . $fileName)) {
+        $pdo = connect();
 
-      $pdo = connect();
+        $get_id = "SELECT user_id FROM users WHERE username = :username;";
+        $stmt = $pdo->prepare($get_id);
+        $stmt->execute(array(':username' => $username));
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        $id = $res['user_id'];
 
-      $get_id = "SELECT user_id FROM users WHERE username = :username;";
-      $stmt = $pdo->prepare($get_id);
-      $stmt->execute(array(':username' => $username));
-      $res = $stmt->fetch(PDO::FETCH_ASSOC);
-      $id = $res['user_id'];
+        $insert_pic = "INSERT INTO images(`img_user_id`, `path`, `created`) VALUES (:id, :path, :date);";
+        $stmt = $pdo->prepare($insert_pic);
+        $stmt->execute(array('id' => $id, ':path' => $file, ':date' => date('Y-m-d H:i:s')));
 
-      $insert_pic = "INSERT INTO images(`img_user_id`, `path`) VALUES (:id, :path)";
-      $stmt = $pdo->prepare($insert_pic);
-      $stmt->execute(array('id' => $id, ':path' => $target_file));
-
-      move_uploaded_file($_FILES['img']['tmp_name'], $target_dir.$name);
+        echo "Image uploaded to gallery.";
+      }
+      else {
+        echo "Unable to upload image.";
+      }
   }
   else
     echo "Wrong format";

@@ -34,8 +34,7 @@
 </html>
 
 <?php
-	include '../config/connect.php';
-	include 'validation.php';
+	include_once '../config/connect.php';
 	session_start();
 
 	$submit = $_POST['submit'];

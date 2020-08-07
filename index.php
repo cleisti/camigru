@@ -14,7 +14,7 @@
 	</head>
 	<body>
 		<header>
-			<a href="index.php">Gallery</a>
+			<a href="index.php?page=gallery">Gallery</a>
 		<?php
 			if (!$user || $user == "") {
 				?>
@@ -39,7 +39,7 @@
 					if (isset($_GET['page']) && $_GET['page'] != '')
 						$page = $_GET['page'];
 					else
-						$page = 'home';
+						$page = 'gallery';
 					include($page.'.php');
 				?>
 			</div>

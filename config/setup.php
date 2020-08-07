@@ -20,7 +20,23 @@
 		`img_id` INT NOT NULL AUTO_INCREMENT,
 		`img_user_id` INT NOT NULL,
 		`path` VARCHAR(255) NOT NULL,
+		`created` DATETIME NOT NULL,
 		PRIMARY KEY (`img_id`)
+	);";
+
+	$likes = "CREATE TABLE IF NOT EXISTS likes (
+		`like_id` INT NOT NULL AUTO_INCREMENT,
+		`like_user_id` INT NOT NULL,
+		`like_img_id` INT NOT NULL,
+		PRIMARY KEY (`like_id`)
+	);";
+
+	$comments = "CREATE TABLE IF NOT EXISTS comments (
+		`comment_id` INT NOT NULL AUTO_INCREMENT,
+		`comment_user_id` INT NOT NULL,
+		`comment_img_id` INT NOT NULL,
+		`date` DATETIME NOT NULL,
+		PRIMARY KEY (`comment_id`)
 	);";
 
 	$pdo->exec($database . $users . $images);

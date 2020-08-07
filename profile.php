@@ -1,16 +1,7 @@
 <?php
     include_once 'config/connect.php';
+    include_once 'account/validation.php';
     $username = $_SESSION['logged_user'];
-
-    function    fetch_email($username) {
-        $pdo = connect();
-        $fetch_email = "SELECT email FROM users WHERE username = :username;";
-        $stmt = $pdo->prepare($fetch_email);
-        $stmt->execute(array(':username' => $username));
-        $res = $stmt->fetch(PDO::FETCH_ASSOC);
-        $email = $res['email'];
-        return ($email);
-    }
 
     function    fetch_picture_path($username) {
         $pdo = connect();
@@ -65,7 +56,7 @@
 
 </head>
     <body>
-    <img src="<?php if ($profile_pic)
+    <img style="width: 100px; height: auto; border-radius: 50%;" src="<?php if ($profile_pic)
                         echo $profile_pic ?>">
     <form action="" method="post" enctype="multipart/form-data">
         Upload a new picture:<br />
