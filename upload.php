@@ -66,7 +66,7 @@ catch (PDOException $e) {
 <h2 style="text-align: center;">Create a new image</h2>
 <div class="contentArea" style="display: flex; justify-content: space-between;">
     <div class="stickers" style="height: 300px;">
-      <img src="stickers/sunglasses.png" id="sunglasses" style="width: 100px">
+      <img draggable="true" src="stickers/bwnoise.png" id="bwnoise" style="width: 100px; cursor: move;" onclick=addFilter(this)>
     </div>
     <div class="camera">
       <video id="video">Video stream not available.</video>

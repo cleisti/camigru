@@ -3,7 +3,7 @@
 	box-shadow: 2px 2px 3px black;
 	width:320px;
 	height:240px;
-	float: left;
+	position: absolute;
   }
   
   #canvas {
@@ -12,6 +12,7 @@
   
   .camera {
 	width: 340px;
+	position: relative;
 	float: left;
   }
   

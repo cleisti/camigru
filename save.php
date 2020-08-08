@@ -20,7 +20,7 @@
     $img_data = base64_decode($img_base64);
     $src = imagecreatefrompng('stickers/' . $sticker . '.png');
     $dest = imagecreatefromstring($img_data);
-    imagecopy($dest, $src, 0, 0, 0, 0, imagesx($src), imagesy($src)); //have to play with these numbers for it to work for you, etc.
+    imagecopy($dest, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
     header('Content-Type: image/png');
     $filename = uniqid('', true) . '.png';
     $path = 'images/' . $filename;
