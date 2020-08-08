@@ -71,7 +71,6 @@
 		canvas.width = width;
 		canvas.height = height;
 		context.drawImage(video, 0, 0, width, height);
-		context.drawImage("http://localhost:8080/Camigru/stickers/sunglasses.png", 0, 0, 100, 250);
 	  
 		var data = canvas.toDataURL('image/png');
 
@@ -99,6 +98,13 @@
 	  }
 	}
 
+	// document.getElementById('sunglasses').addEventListener('click', function() {
+    //     var img_id = document.getElementById("sunglasses").value,
+    //         img = document.getElementById(img_id);
+    //     context.drawImage(img,0,0,400,300);
+    //     photo.value = canvas.toDataURL('image/png');
+    // });
+
 	function	save(element) {
 		if (confirm("Save image?")) {
 			var id = element.id;
@@ -106,7 +112,7 @@
 			var xhttp = new XMLHttpRequest();
 			xhttp.open('POST', 'save.php', true);
 			xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-			xhttp.send('image='+encodeURIComponent(element.src));
+			xhttp.send('sticker=sunglasses&image='+encodeURIComponent(element.src));
 		}
 	}
 
