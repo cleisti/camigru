@@ -4,6 +4,8 @@
 	width:320px;
 	height:240px;
 	position: absolute;
+	top: 0;
+	left: 0;
   }
   
   #canvas {
@@ -18,16 +20,22 @@
   
   #output {
 	width: 340px;
-	/* display:inline-block; */
 	float: right;
+	position: relative;
+	overflow: scroll;
+	max-height: 300px;
+	width: 180px;
+	display: block;
+	flex-direction: row;
   }
   
   #startbutton {
 	display:block;
-	position:relative;
+	position: absolute;
+	z-index: 2;
 	margin-left:auto;
 	margin-right:auto;
-	bottom:32px;
+	bottom: 0px;
 	background-color: rgba(0, 150, 0, 0.5);
 	border: 1px solid rgba(255, 255, 255, 0.7);
 	box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, 0.2);
@@ -41,4 +49,14 @@
 	font-family: "Lucida Grande", "Arial", sans-serif;
 	width: 760px;
 	display: relative;
+  }
+
+  #filters {
+	width: 100px;
+	max-height: 300px;
+	overflow: scroll;
+  }
+
+  .filter {
+	  max-width: 100px;
   }

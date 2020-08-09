@@ -5,11 +5,12 @@
     $username = $_SESSION['logged_user'];
 
     $img = $_POST['image'];
-    $sticker =  $_POST['sticker'];
+    $filters =  $_POST['filter'];
+    $filters = explode(',', $filters);
+    array_pop($filters);
+    // array_shift($filters);
+
     // $folderPath = "images/";
-    
-    if (empty($sticker))
-        echo "No filter selected.";
   
     // $image_parts = explode(";base64,", $img);
     // $image_type_aux = explode("image/", $image_parts[0]);
@@ -18,16 +19,25 @@
     $img_base64 = str_replace('data:image/png;base64,', '', $img);
     $img_base64 = str_replace(' ', '+', $img_base64);
     $img_data = base64_decode($img_base64);
-    $src = imagecreatefrompng('stickers/' . $sticker . '.png');
     $dest = imagecreatefromstring($img_data);
-    imagecopy($dest, $src, 0, 0, 0, 0, imagesx($src), imagesy($src));
+
+    $width = imagesx($dest);
+    $height = imagesy($dest);
+
+    foreach ($filters as $filter) {
+        $f = imagecreatefrompng('filters/' . $filter . '.png');
+        // $src = imagecreatetruecolor($width, $height);
+        // imagecopyresampled($src, 'filters/' . $filter . '.png', 0, 0, 0, 0, $width, $height, imagesx($f), imagesy($f));
+        imagecopyresized($dest, $f, 0, 0, 0, 0, $width, $height, imagesx($f), imagesy($f));
+        imagedestroy($src);
+    }
     header('Content-Type: image/png');
     $filename = uniqid('', true) . '.png';
     $path = 'images/' . $filename;
     // Saving to path
     $status = imagepng($dest, $path);
     imagedestroy($dest);
-    imagedestroy($src);
+    unset($_POST);
   
     // $image_base64 = base64_decode($image_parts[1]);
     // $fileName = uniqid() . '.png';

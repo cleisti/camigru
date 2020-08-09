@@ -3,7 +3,7 @@ include_once 'config/connect.php';
 
 $username = $_SESSION['logged_user'];
 $id = $_SESSION['user_id'];
-$submit = $_POST['submit'];
+// $submit = $_POST['submit'];
 
 if ($submit === "Upload Image") {
 
@@ -65,11 +65,16 @@ catch (PDOException $e) {
 <body>
 <h2 style="text-align: center;">Create a new image</h2>
 <div class="contentArea" style="display: flex; justify-content: space-between;">
-    <div class="stickers" style="height: 300px;">
-      <img draggable="true" src="stickers/bwnoise.png" id="bwnoise" style="width: 100px; cursor: move;" onclick=addFilter(this)>
+    <div id="filters">
+      <img class="filter" src="filters/bwnoise.png" id="bwnoise" data-clickcount="0">
+      <img class="filter" src="filters/flowers.png" id="flowers" data-clickcount="0">
+      <img class="filter" src="filters/frame.png" id="frame" data-clickcount="0">
+      <img class="filter" src="filters/hearts.png" id="hearts" data-clickcount="0">
+      <img class="filter" src="filters/roses.png" id="roses" data-clickcount="0">
     </div>
     <div class="camera">
       <video id="video">Video stream not available.</video>
+      <!-- <div style="background-color: #AAA; width: 320px; height: 240px; position: absolute; top: 0; left: 0; opacity: 0.3;"></div> -->
       <button id="startbutton">Take photo</button>
       <input type="hidden" name="image" id="image-tag" value="">
     </div>
@@ -80,7 +85,8 @@ catch (PDOException $e) {
         <input type="file" accept="image/*" name="img"><br />
         <input type="submit" value="Upload Image" name="submit">
   </form> -->
-  <div id="output" style="max-height: 300px; width: 180px; overflow: scroll;">
+  <div id="output">
+  <p>click on the image to save</p>
   </div>
 </div>
 <h2 style="text-align: center;">Your images</h2>
@@ -92,6 +98,6 @@ catch (PDOException $e) {
 				<?php }
 			}
 		?>
-	</div>
+</div>
 </body>
 </html>
