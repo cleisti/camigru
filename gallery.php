@@ -51,6 +51,6 @@
 			}
 		?>
 	</div>
-	<div id="popup"></div>
+	<div id="popup" style="display: none; position: fixed; z-index: 1; top: 0; background-color: green;"></div>
 </body>
 </html>
