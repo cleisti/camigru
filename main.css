@@ -48,7 +48,8 @@
 	font-size: 16px;
 	font-family: "Lucida Grande", "Arial", sans-serif;
 	width: 760px;
-	display: relative;
+	position: relative;
+	display: flex;
   }
 
   #filters {
@@ -60,3 +61,30 @@
   .filter {
 	  max-width: 100px;
   }
+
+  .gallery {
+	  display: flex;
+	  max-width: 750px;
+	  flex-flow: row wrap;
+	  justify-content: center;
+  }
+
+  .image_div {
+	  min-width: 100px;
+	  max-width: 250px;
+	  position: relative;
+	  padding: 1%;
+  }
+
+  .gallery_img {
+	  max-width: 100%;
+  }
+
+.remove {
+	width: 30px;
+	height: 30px;
+	position: absolute;
+	top: 0;
+	background-color: red;
+	z-index: 1;
+}

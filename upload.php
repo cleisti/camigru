@@ -90,11 +90,13 @@ catch (PDOException $e) {
   </div>
 </div>
 <h2 style="text-align: center;">Your images</h2>
-<div id="gallery">
+<div class="gallery">
 		<?php
 			foreach ($images as $img) {
 				if (file_exists($img['path'])) { ?>
-					<img style="width: 25%; margin: 10px;" id="<?$img['img_id']?>" src="<?=$img['path']?>" ondblclick="remove(this)">
+          <div class="image_div">
+					  <img class="gallery_img" name="image" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
+          </div>
 				<?php }
 			}
 		?>

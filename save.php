@@ -48,7 +48,7 @@
 
     // $file = $folderPath . $fileName;
 
-    function    get_id($username, $pdo) {
+    function    get_id($username, $pdo) { // fix session_user_id
         try {
             $get_id = "SELECT user_id FROM users WHERE username = :username;";
             $stmt = $pdo->prepare($get_id);

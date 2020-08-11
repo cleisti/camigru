@@ -23,7 +23,7 @@
 	<link rel="stylesheet" href="main.css" type="text/css" media="all">
 	<script>
 	let popup = document.querySelector('#popup');
-	let images = document.querySelectorAll('#gallery a').forEach(img_link => {
+	document.querySelectorAll('#gallery a').forEach(img_link => {
 		img_link.onclick = e => {
 			e.preventDefault();
 			let img_meta = img_link.querySelector('img');
