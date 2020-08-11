@@ -20,31 +20,11 @@
 <html>
 <head>
 	<meta charset='utf-8'>
-	<link rel="stylesheet" href="main.css" type="text/css" media="all">
-	<script>
-	let popup = document.querySelector('#popup');
-	document.querySelectorAll('#gallery a').forEach(img_link => {
-		img_link.onclick = e => {
-			e.preventDefault();
-			let img_meta = img_link.querySelector('img');
-			let img = new Image();
-			img.onload = () => {
-				popup.innerHTML = `
-					<div>
-						<img src="${img.src}">
-						<a href="delete.php">Delete</a>
-					</div>
-				`;
-				popup.style.display = 'flex';
-			};
-
-		}
-	})
-	
-
+	<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
+	<script src="galleryfeatures.js">
 	// function	like(element) {
 	// 	let img_id = element.id;
-	// 	let user_id = <?php echo $user_id ?>;
+		// let user_id = ;
 	// 	console.log(img_id);
 	// 	console.log(user_id);
 	// 	if (user_id) {
@@ -60,12 +40,12 @@
 	</script>
 </head>
 <body>
-	<div id="gallery">
+	<div class="gallery">
 		<?php
 			foreach ($res as $img) {
 				if (file_exists($img['path'])) { ?>
 				<a href="#">
-					<img style="width: 45%; margin: 10px;" id="<?$img['img_id']?>" src="<?=$img['path']?>">
+					<img style="width: 45%; margin: 10px;" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
 				</a>
 				<?php }
 			}

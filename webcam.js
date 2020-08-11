@@ -61,8 +61,9 @@ var index = 0;
 		console.log(image_divs);
 
 		image_divs.forEach(function(div) {
-			let remove = document.createElement('div');
-			remove.setAttribute('style', 'width: 30px; height: 30px; position: absolute; top: 0; background-color: red; z-index: 1;');
+			let remove = document.createElement('img');
+			remove.setAttribute('class', 'remove');
+			remove.setAttribute('src', 'icons/trash.png');
 			remove.addEventListener('click', function() {
 				remove_image(this);
 			})
@@ -183,6 +184,7 @@ function	remove_image(element) {
 	alert("Remove image?");
 	console.log(image.id);
 	var xhttp = new XMLHttpRequest();
+	xhttp.open('POST', 'remove.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-	xhttp.send('img_id=', image.id);
+	xhttp.send('img_id=' + image.id);
 }

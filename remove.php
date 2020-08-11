@@ -25,7 +25,8 @@
 		$pdo = connect();
 		$id = get_id($username, $pdo);
 
-		$remove_pic = "SELECT img_id FROM images WHERE img_id = :img_id AND img_user_id = :user_id;";
-
+		$remove_pic = "DELETE FROM images WHERE img_id = :img_id AND img_user_id = :user_id;";
+		$stmt = $pdo->prepare($remove_pic);
+		$stmt->execute(array(':img_id' => $img_id, ':user_id' => $id));
 	}
 ?>
