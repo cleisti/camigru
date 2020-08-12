@@ -44,13 +44,13 @@
 		<?php
 			foreach ($res as $img) {
 				if (file_exists($img['path'])) { ?>
-				<a href="#">
-					<img style="width: 45%; margin: 10px;" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
-				</a>
+				<div>
+					<img class="image" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
+				</div>
 				<?php }
 			}
 		?>
 	</div>
-	<div id="popup" style="display: none; position: fixed; z-index: 1; top: 0; background-color: green;"></div>
+	<div id="popup"></div>
 </body>
 </html>

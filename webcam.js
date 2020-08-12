@@ -27,20 +27,17 @@ var index = 0;
 
 	  video.addEventListener('canplay', function(ev){
 		if (!streaming) {
-		  height = video.videoHeight / (video.videoWidth/width);
+			height = video.videoHeight / (video.videoWidth/width);
 
-		  // Firefox currently has a bug where the height can't be read from
-		  // the video, so we will make assumptions if this happens.
+			if (isNaN(height)) {
+				height = width / (4/3);
+			}
 
-		  if (isNaN(height)) {
-			height = width / (4/3);
-		  }
-
-		  video.setAttribute('width', width);
-		  video.setAttribute('height', height);
-		  canvas.setAttribute('width', width);
-		  canvas.setAttribute('height', height);
-		  streaming = true;
+			video.setAttribute('width', width);
+			video.setAttribute('height', height);
+			canvas.setAttribute('width', width);
+			canvas.setAttribute('height', height);
+			streaming = true;
 		}
 	  }, false);
   

@@ -1,11 +1,12 @@
 (function() {
 
 	function	addLinks() {
-		document.querySelectorAll('.gallery a').forEach(link => {
-		link.onclick = e => {
-			e.preventDefault();
-			openImagePopup(this);
-		};
+		const divs = document.querySelectorAll('.gallery div');
+
+		divs.forEach(function(div) {
+			div.addEventListener('click', function() {
+				openImagePopup(this);
+			});
 		});
 	}
 	window.addEventListener('load', addLinks, false);
@@ -13,8 +14,16 @@
 
 function 	openImagePopup(element) {
 	let popup = document.getElementById('popup');
-	console.log(popup);
+	console.log("element", element.innerHTML);
 	popup.style.display = 'block';
-	popup.innerHTML = "hello";
-	alert('here');
+	popup.innerHTML = element.innerHTML;
+	element.innerHTML.style.width = '100%';
+}
+
+window.onclick = function(event) {
+	let popup = document.getElementById('popup');
+	console.log(event.target);
+	if (event.target == popup) {
+		popup.style.display = 'none';
+	}
 }
