@@ -16,10 +16,18 @@
     // $image_type_aux = explode("image/", $image_parts[0]);
     // $image_type = $image_type_aux[1];
 
-    $img_base64 = str_replace('data:image/png;base64,', '', $img);
-    $img_base64 = str_replace(' ', '+', $img_base64);
-    $img_data = base64_decode($img_base64);
-    $dest = imagecreatefromstring($img_data);
+    if (!$_POST['uploaded']) {
+        $img_base64 = str_replace('data:image/png;base64,', '', $img);
+        $img_base64 = str_replace(' ', '+', $img_base64);
+        $img_data = base64_decode($img_base64);
+        $dest = imagecreatefromstring($img_data);
+    }
+    else
+    {
+        $image_parts = explode(";base64,", $img)[1];
+        $img_data = base64_decode($image_parts);
+        $dest = imagecreatefromstring($img_data);
+    }
 
     $width = imagesx($dest);
     $height = imagesy($dest);

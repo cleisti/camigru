@@ -59,44 +59,44 @@ catch (PDOException $e) {
 <head>
 	<meta charset='utf-8'>
 	<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
-	<script src="webcam.js">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="webcam.js">
 	</script>
 </head>
 <body>
 <h2 style="text-align: center;">Create</h2>
-<div class="contentArea" style="display: flex; justify-content: space-between;">
-    <div id="filters">
+<div class="d-inline-flex flex-wrap align-content-center justify-content-center">
+    <div id="filters" style="margin: 20px;">
       <img class="filter" src="filters/bwnoise.png" id="bwnoise" data-clickcount="0">
       <img class="filter" src="filters/flowers.png" id="flowers" data-clickcount="0">
       <img class="filter" src="filters/frame.png" id="frame" data-clickcount="0">
       <img class="filter" src="filters/hearts.png" id="hearts" data-clickcount="0">
       <img class="filter" src="filters/roses.png" id="roses" data-clickcount="0">
     </div>
-    <div class="camera">
+    <div class="camera" id="camera" style="margin: 20px;">
+      <div id="photo" data-uploaded="0"></div>
+      <div id="selectedFilters"></div>
       <video id="video">Video stream not available.</video>
       <!-- <div style="background-color: #AAA; width: 320px; height: 240px; position: absolute; top: 0; left: 0; opacity: 0.3;"></div> -->
-      <button id="startbutton">Take photo</button>
+      <div class="d-inline-flex align-content-center justify-content-center" id="buttons">
+      <button id="save">Save</button>
+      <button id="new">New</button>
+      <button id="startbutton">Capture</button>
       <input type="hidden" name="image" id="image-tag" value="">
+      <input class="form-control-file" type="file" accept="image/*" name="img" onchange="uploadImageToCanvas(this)">
+      </div>
     </div>
   <canvas id="canvas">
   </canvas>
-  <!-- <form action="" method="post" enctype="multipart/form-data">
-        Or upload a picture:<br />
-        <input type="file" accept="image/*" name="img"><br />
-        <input type="submit" value="Upload Image" name="submit">
-  </form> -->
-  <div id="output">
-  <p>click on the image to save</p>
-  </div>
 </div>
 <h2 style="text-align: center;">Your images</h2>
-<div class="gallery">
+<div class="d-inline-flex flex-wrap justify-content-center" style="padding: 20px;" id="gallery">
 		<?php
 			foreach ($images as $img) {
-				if (file_exists($img['path'])) { ?>
-          <div class="image_div">
-					  <img class="gallery_img" name="image" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
-          </div>
+        if (file_exists($img['path'])) { ?>
+        <div class="card" style="margin: 5px; max-width: 150px;">
+					  <img class="card-img-top" name="image" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
+        </div>
 				<?php }
 			}
 		?>

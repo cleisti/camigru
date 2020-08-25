@@ -56,14 +56,15 @@
 
 </head>
     <body>
-    <img style="width: 100px; height: auto; border-radius: 50%;" src="<?php if ($profile_pic)
+    <h3>Your profile</h3>
+    <img class="img-circle" style="width: 100px;" src="<?php if ($profile_pic)
                         echo $profile_pic ?>">
     <form action="" method="post" enctype="multipart/form-data">
         Upload a new picture:<br />
         <input type="file" name="image" id="fileToUpload"><br />
         <input type="submit" value="Upload Image" name="submit">
     </form><br />
-        <table>
+        <table class="table-condensed">
             <tr>
                 <th>Username</th>
                 <td><?php echo $username ?></td>

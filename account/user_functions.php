@@ -3,13 +3,13 @@
 <head>
 </head>
     <body>
-		<h2>Change username</h2>
+		<h3>Change username</h3>
         <form action="" method="post">
             New username:<br />
 			<input type="text" name="new_un" minlength="4" maxlength="25" value="" required /><br />
             <input class="button" type="submit" name="submit" value="Change username" />
         </form>
-		<h2>Change email-address</h2>
+		<h3>Change email-address</h3>
         <form action="" method="post">
             New email:<br />
 			<input type="email" name="new_email" value="" required /><br />
@@ -17,7 +17,7 @@
 			<input type="email" name="validate_email" value="" required /><br />
             <input class="button" type="submit" name="submit" value="Change email" />
         </form>
-        <h2>Change password</h2>
+        <h3>Change password</h3>
         <form action="" method="post">
             Old password:<br />
 			<input type="password" name="old_pw" minlength="8" maxlength="20" value="" required />

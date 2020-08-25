@@ -1,7 +1,7 @@
 (function() {
 
 	function	addLinks() {
-		const divs = document.querySelectorAll('.gallery div');
+		const divs = document.querySelectorAll('#gallery div');
 
 		divs.forEach(function(div) {
 			div.addEventListener('click', function() {
@@ -14,10 +14,14 @@
 
 function 	openImagePopup(element) {
 	let popup = document.getElementById('popup');
+	let innerPopup = document.getElementById('innerPopup');
 	console.log("element", element.innerHTML);
-	popup.style.display = 'block';
-	popup.innerHTML = element.innerHTML;
-	element.innerHTML.style.width = '100%';
+	popup.style.display = 'flex';
+	innerPopup.style.display = 'flex-column';
+	innerPopup.style.justifyContent = 'center';
+	popup.style.justifyContent = 'center';
+	popup.style.alignItems = "flex-start";
+	innerPopup.innerHTML = element.innerHTML;
 }
 
 window.onclick = function(event) {
