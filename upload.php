@@ -79,11 +79,11 @@ catch (PDOException $e) {
       <video id="video">Video stream not available.</video>
       <!-- <div style="background-color: #AAA; width: 320px; height: 240px; position: absolute; top: 0; left: 0; opacity: 0.3;"></div> -->
       <div class="d-inline-flex align-content-center justify-content-center" id="buttons">
-      <button id="save">Save</button>
-      <button id="new">New</button>
-      <button id="startbutton">Capture</button>
-      <input type="hidden" name="image" id="image-tag" value="">
-      <input class="form-control-file" type="file" accept="image/*" name="img" onchange="uploadImageToCanvas(this)">
+        <button id="save">Save</button>
+        <button id="new">New</button>
+        <button id="startbutton">Capture</button>
+        <input type="hidden" name="image" id="image-tag" value="">
+        <input class="form-control-file" type="file" accept="image/*" name="img" onchange="uploadImageToCanvas(this)">
       </div>
     </div>
   <canvas id="canvas">

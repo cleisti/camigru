@@ -39,6 +39,6 @@
 		PRIMARY KEY (`comment_id`)
 	);";
 
-	$pdo->exec($database . $users . $images);
+	$pdo->exec($database . $users . $images . $likes . $comments);
 
 ?>

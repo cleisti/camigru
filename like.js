@@ -1,14 +1,18 @@
 function	like(element) {
 	let img_id = element.id;
-	let user_id = <?=$user_id?>;
 	console.log(img_id);
-	if (user_id) {
-		let xhttp = new XMLHttpRequest();
-		xhttp.open('GET', 'like.php', true);
+	let xhttp = new XMLHttpRequest();
+		xhttp.open('POST', 'like.php', true);
 		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-		xhttp.send('img_id=' + img_id + "&user_id=" + user_id);
-	}
-	else {
-		alert("You must be logged in to like.");
-	}
+		xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+		xhttp.onload = function () {
+			if (xhttp.status == 200) {
+				var result = xhttp.responseText;
+				let paragraph = document.getElementById("show_" + element.id);
+				console.log(paragraph);
+				paragraph.innerHTML = result;
+				// element.dataset.liked = 1;
+			}
+		};
+		xhttp.send('img_id=' + img_id);
 }

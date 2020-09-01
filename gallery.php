@@ -1,6 +1,6 @@
 <?php
 	include_once 'config/connect.php';
-	session_start();
+	// session_start();
 
 	$pdo = connect();
 	$username = $_SESSION['logged_user'];
@@ -33,23 +33,8 @@
 	<meta charset='utf-8' name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="galleryfeatures.js">
-	// function	like(element) {
-	// 	let img_id = element.id;
-		// let user_id = ;
-	// 	console.log(img_id);
-	// 	console.log(user_id);
-	// 	if (user_id) {
-	// 		let xhttp = new XMLHttpRequest();
-	// 		xhttp.open('GET', 'like.php', true);
-	// 		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-	// 		xhttp.send('img_id=' + img_id + "&user_id=" + user_id);
-	// 	}
-	// 	else {
-	// 		alert("You must be logged in to likea picture.");
-	// 	}
-	// }
-	</script>
+	<script src="galleryfeatures.js"></script>
+	<script src="like.js"></script>
 </head>
 <body>
 	<div class="d-inline-flex p-2 flex-wrap justify-content-center align-content-around" id="gallery">
@@ -61,7 +46,11 @@
 					<div class="card-header" style="padding: 10px;">
 					Img-title
 					</div>
-					<img class="card-img-top" style="padding: 10px;" name="<?=$img['img_id']?>" src="<?=$img['path']?>">
+					<img class="image" style="padding: 10px;" name="<?=$img['img_id']?>" src="<?=$img['path']?>">
+					<div class="card-footer" style="padding: 10px;">
+						<img src="icons/like.png" id="<?=$img['img_id']?>" style="height: 20px; width: 20px; float: left;" <?php if ($username) {echo "onClick='like(this)''";} ?>>
+						<div style="height: 20px; width: 20px; float: left;" id="show_<?=$img['img_id']?>"></div>
+					</div>
 				</div>
 				<?php }
 			}
