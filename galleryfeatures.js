@@ -11,28 +11,52 @@
 	}
 
 	function	addLikes() {
-		const likes = document.querySelectorAll('.card-footer div');
+		const likes = document.querySelectorAll('.likes');
 
 		likes.forEach(function(like) {
-			let id = like.id.substr(5);
+			let id = like.id.substr(6);
 			console.log('id=' + id);
 			let xhttp = new XMLHttpRequest();
-			xhttp.open('POST', 'like.php', true);
+			xhttp.open('POST', 'likes.php', true);
 			xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 			xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhttp.onload = function () {
 				if (xhttp.status == 200) {
-					var result = xhttp.responseText;
+					var result = JSON.parse(xhttp.responseText);
 					console.log(result);
-					like.innerHTML = result;
+					like.innerHTML = result.likes_total;
 					
 				}
 			};
 			xhttp.send('nb_likes=' + id);
 		})
 	}
+
+	function	addComments() {
+		const comments = document.querySelectorAll('.comments');
+
+		comments.forEach(function(comment) {
+			let id = comment.id.substr(9);
+			console.log('id: ' + id);
+			let xhttp = new XMLHttpRequest();
+			xhttp.open('POST', 'comments.php', true);
+			xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
+			xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+			xhttp.onload = function () {
+				if (xhttp.status == 200) {
+					var result = JSON.parse(xhttp.responseText);
+					console.log(result);
+					comment.innerHTML = result.comments_total;
+					
+				}
+			};
+			xhttp.send('nb_comments=' + id);
+		})
+	}
+
 	window.addEventListener('load', addLinks, false);
 	window.addEventListener('load', addLikes, false);
+	window.addEventListener('load', addComments, false);
 })();
 
 function 	openImagePopup(element) {

@@ -48,8 +48,11 @@
 					</div>
 					<img class="image" style="padding: 10px;" name="<?=$img['img_id']?>" src="<?=$img['path']?>">
 					<div class="card-footer" style="padding: 10px;">
-						<img src="icons/like.png" id="<?=$img['img_id']?>" style="height: 20px; width: 20px; float: left;" <?php if ($username) {echo "onClick='like(this)''";} ?>>
-						<div style="height: 20px; width: 20px; float: left;" id="show_<?=$img['img_id']?>"></div>
+						<img src="icons/like.png" id="<?=$img['img_id']?>" style="height: 20px; width: 20px; float: left;" onClick='like(this)'>
+						<div class="likes" style="height: 20px; width: 20px; float: left;" id="likes_<?=$img['img_id']?>"></div>
+						<img src="icons/comment.png" id="<?=$img['img_id']?>" style="height: 20px; width: 20px; float: left;" onClick='like(this)'>
+						<div class="comments" style="height: 20px; width: 20px; float: left;" id="comments_<?=$img['img_id']?>"></div>
+						<div id="error_<?=$img['img_id']?>" style="display: none;"></div>
 					</div>
 				</div>
 				<?php }
@@ -72,7 +75,7 @@
 		</div>
 	</div>
 	<div id="popup" class="modal">
-		<div id="innerPopup" >
+		<div id="innerPopup">
 		</div>
 	</div>
 </body>
