@@ -16,7 +16,7 @@
 	$start = ($page - 1) * $limit;
 
 	try {
-		$fetch_images = "SELECT * FROM images ORDER BY created DESC LIMIT 6 OFFSET :startId";
+		$fetch_images = "SELECT images.*, users.username AS uname FROM images INNER JOIN users ON images.img_user_id = users.user_id ORDER BY created DESC LIMIT 6 OFFSET :startId";
 		$stmt = $pdo->prepare($fetch_images);
 		$stmt->bindValue('startId', $start, PDO::PARAM_INT);
 		$stmt->execute();
@@ -34,7 +34,6 @@
 	<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="galleryfeatures.js"></script>
-	<script src="like.js"></script>
 </head>
 <body>
 	<div class="d-inline-flex p-2 flex-wrap justify-content-center align-content-around" id="gallery">
@@ -42,16 +41,14 @@
 
 			foreach ($res as $img) {
 				if (file_exists($img['path'])) { ?>
-				<div class="card" style="margin: 5px; max-width: 340px;">
-					<div class="card-header" style="padding: 10px;">
-					Img-title
-					</div>
-					<img class="image" style="padding: 10px;" name="<?=$img['img_id']?>" src="<?=$img['path']?>">
+				<div class="card" style="margin: 5px auto; width: 100%; max-width: 600px;">
+					<div class="card-header"><p style="margin: 0;" id="creator_<?=$img['img_id']?>"><b>@<?=$img['uname']?></b></p></div>
+					<img class="image" style="padding: 10px; width: 100%;" name="<?=$img['img_id']?>" id="<?=$img['img_id']?>" src="<?=$img['path']?>">
 					<div class="card-footer" style="padding: 10px;">
-						<img src="icons/like.png" id="<?=$img['img_id']?>" style="height: 20px; width: 20px; float: left;" onClick='like(this)'>
-						<div class="likes" style="height: 20px; width: 20px; float: left;" id="likes_<?=$img['img_id']?>"></div>
-						<img src="icons/comment.png" id="<?=$img['img_id']?>" style="height: 20px; width: 20px; float: left;" onClick='like(this)'>
-						<div class="comments" style="height: 20px; width: 20px; float: left;" id="comments_<?=$img['img_id']?>"></div>
+						<img class="like" src="icons/like.png" id="likeImg_<?=$img['img_id']?>" name="<?=$img['img_id']?>" onClick='like(this)'>
+						<div class="likes" id="likes_<?=$img['img_id']?>"></div>
+						<img class="comment" src="icons/comment.png" name="<?=$img['img_id']?>" onClick="openImagePopup(this)">
+						<div class="comments" id="comments_<?=$img['img_id']?>"></div>
 						<div id="error_<?=$img['img_id']?>" style="display: none;"></div>
 					</div>
 				</div>
@@ -71,12 +68,25 @@
 				$pagLink .= "<li class='page-item'><a class='page-link' href='index.php?page=gallery&gallery_page=".$i."'>".$i."</a></li>";
 			}
 			echo $pagLink . "</ul>";
-	?>
+		?>
+		</div>
+		<div id="popup" class="modal">
+		<div id="innerPopup" class="container">
+		<span class="close" onClick=close()>&times;</span>
+			<div class="row align-items-center justify-content-center" style="padding: 0; ">
+				<div id="imageBox" class="col-sm-8"></div>
+				<div id="commentBox" class="col-sm-4">
+					<h5 id="creator"></h5>
+					<div id="likeBox"></div>
+					<h6 id="commentHeader"></h6>
+					<div id="allComments"></div>
+					<input type="text" id="newComment" placeholder="Add a comment..." minlength="4" maxlength="255" required />
+					<input type="submit" id="commentSubmit" class="commentButton">
+				</div>
+				<div id="errorBox" style="display: none;"></div>
+			</div>
 		</div>
 	</div>
-	<div id="popup" class="modal">
-		<div id="innerPopup">
-		</div>
 	</div>
 </body>
 </html>

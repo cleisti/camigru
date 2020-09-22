@@ -35,6 +35,7 @@
 		`comment_id` INT NOT NULL AUTO_INCREMENT,
 		`comment_user_id` INT NOT NULL,
 		`comment_img_id` INT NOT NULL,
+		`comment` VARCHAR(255) NOT NULL,
 		`date` DATETIME NOT NULL,
 		PRIMARY KEY (`comment_id`)
 	);";

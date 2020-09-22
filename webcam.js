@@ -7,6 +7,7 @@ var index = 0;
 var count = 0;
 var startbutton = null;
 var imgContainer = null;
+var canvasData = null;
 
 (function() {
 
@@ -71,25 +72,8 @@ var imgContainer = null;
 	}
 	
 	window.addEventListener('load', startup, false);
+	window.addEventListener('load', load_images, false);
 })();
-
-	// function	addFilters(imgContainer) {
-	// 	let filters = document.querySelectorAll('.camera img');
-
-	// 	filters.forEach(function(filter) {
-	// 		let add = document.createElement('img');
-	// 		add.setAttribute('name', filter.name);
-	// 		add.setAttribute('width', width);
-	// 		add.setAttribute('height', height);
-	// 		add.setAttribute('style', 'position: absolute;');
-	// 		add.setAttribute('src', filter.src);
-	// 		imgContainer.appendChild(add);
-	// 		console.log('filter added to preview');
-	// 		let filterId = document.getElementById(filter.name);
-	// 		console.log("FilterID: ", filterId);
-	// 		selectFilter(filterId);
-	// 	})
-	// }
 
 function	takepicture() {
 	let context = canvas.getContext('2d');
@@ -99,16 +83,13 @@ function	takepicture() {
 		canvas.height = height;
 		context.drawImage(video, 0, 0, width, height);
 
-		let data = canvas.toDataURL('image/png');
-		// let	imgContainer = document.getElementById('photo');
+		canvasData = canvas.toDataURL('image/png');
 
 		let newPhoto = document.createElement('img');
 		newPhoto.setAttribute('width', width);
 		newPhoto.setAttribute('height', height);
-		// newPhoto.setAttribute('style', 'z-index: -1;');
-		newPhoto.setAttribute('src', data);
+		newPhoto.setAttribute('src', canvasData);
 	
-		// addFilters(imgContainer);
 		imgContainer.appendChild(newPhoto);
 		let camera = document.getElementById('camera');
 		camera.insertBefore(imgContainer, camera.firstChild);
@@ -127,10 +108,6 @@ function	takepicture() {
 		saveBtn.addEventListener('click', function() {
 			save();
 		});
-		console.log(index); // remove
-		// document.getElementById('image-tag').value = data;
-		// var data2 = data;
-		// $(".image-tag").val(data);
 		index++;
 	}
 }
@@ -143,34 +120,25 @@ function	selectFilter(element) {
 		element.setAttribute('style', 'border: 2px solid red;');
 		let selectedFilters = document.querySelector('#selectedFilters');
 		let filter = document.createElement('img');
-		// filter.setAttribute('id', element.id);
 		filter.setAttribute('name', element.id);
 		filter.setAttribute('width', width);
 		filter.setAttribute('height', height);
 		filter.setAttribute('style', 'position: absolute; z-index: 2;');
 		filter.setAttribute('src', element.src);
 		selectedFilters.appendChild(filter);
-		console.log('filter added'); //remove
 		element.dataset.clickcount = 1;
 		count++;
 
 	}
 	else {
 		element.removeAttribute('style', 'border: 2px solid red;');
-		let cam = document.querySelector('.camera');
-		// let h = document.querySelectorAll('.camera img');
 		let h = document.getElementsByName(element.id);
-		console.log(element.id, h); // remove
-		let id = element.id;
 		h[0].remove();
-		// cam.removeChild(h[0]);
 		element.dataset.clickcount = 0;
 		count--;
 	}
-	console.log("uploaded: ", imgContainer.width);
 	if (count > 0 && imgContainer.dataset.uploaded == 0)
 	{
-		console.log('count: ', count);
 		startbutton.disabled = false;
 	}
 	else
@@ -178,33 +146,29 @@ function	selectFilter(element) {
 }
 
 function	save() {
-		// let imgContainer = document.getElementById('photo');
 		let	filters;
 		let src;
-		console.log(imgContainer.id); // remove
 		let filter_images = document.querySelectorAll('#selectedFilters img');
-		console.log(filter_images); // remove
 		filter_images.forEach(function(filter) {
 			let fil = filter.name + ',';
-			console.log(fil); // remove
 			if (!filters)
 				filters = fil;
 			else
 				filters += fil;
 		})
-		console.log(filters); // remove
 		src = encodeURIComponent(imgContainer.lastChild.src);
-		console.log(src);
 		uploaded = (imgContainer.dataset.uploaded == 1) ? 1 : 0;
 		var xhttp = new XMLHttpRequest();
 		xhttp.open('POST', 'save.php', true);
 		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-		xhttp.send('filter=' + filters + '&image=' + src + '&uploaded=' + uploaded);
+		if (xhttp.status == 200) {
+			console.log(xhttp.responseText);
+			update_gallery();
+		}
+		xhttp.send('filter=' + filters + '&image=' + canvasData + '&uploaded=' + uploaded);
 }
 
 function	newPicture() {
-	// let imgContainer = document.getElementById('photo');
-	// imgContainer.style.display = 'none';
 	imgContainer.innerHTML = "";
 	imgContainer.dataset.uploaded = 0;
 
@@ -213,10 +177,8 @@ function	newPicture() {
 	document.getElementById('startbutton').style.display = 'block';
 
 	let filters = document.querySelectorAll('#selectedFilters img');
-	console.log(filters);
 	filters.forEach(function(filter) {
 		let filterId = document.getElementById(filter.name);
-		console.log("FilterID: ", filterId);
 		selectFilter(filterId);
 	})
 
@@ -232,43 +194,30 @@ function	remove_image(element) {
 	let images = parent.getElementsByTagName('img');
 	let image = images[0];
 	alert("Remove image?");
-	console.log(image.id);
 	var xhttp = new XMLHttpRequest();
 	xhttp.open('POST', 'remove.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
+	if (xhttp.status == 200) {
+		console.log(xhttp.responseText);
+		update_gallery(); // create this function
+	}
 	xhttp.send('img_id=' + image.id);
 }
 
 function	uploadImageToCanvas(element) {
-	let file = element.files[0];
-	console.log("filesize: ", file.size);
-	let img = document.createElement('img');
-
-	let reader = new FileReader();
-	reader.onload = function(e) {
-		img.setAttribute('src', e.target.result);
-	};
-	reader.readAsDataURL(file);
-	// img.src = reader.result;
-
-	console.log("src: ", img.src);
-
-	let context = canvas.getContext('2d');
 	canvas.width = width;
 	canvas.height = height;
-	context.drawImage(img, 0, 0, width, height);
-	let data = canvas.toDataURL('image/png');
-	let newPhoto = document.createElement('img');
-	newPhoto.setAttribute('width', width);
-	newPhoto.setAttribute('height', height);
-	newPhoto.setAttribute('style', 'z-index: 1;');
-	newPhoto.setAttribute('src', data);
-	imgContainer.appendChild(newPhoto);
+	var img = new Image;
+	img.src = URL.createObjectURL(element.files[0]);
+	img.onload = function() {
+		canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+		canvasData = canvas.toDataURL("image/png");
+	}
 
-	// img.setAttribute('style', 'z-index: 1;');
-	// img.setAttribute('width', width);
-	// img.setAttribute('height', height);
-	// imgContainer.appendChild(img);
+	img.setAttribute('style', 'z-index: 1;'); // make a class
+	img.setAttribute('width', width);
+	img.setAttribute('height', height);
+	imgContainer.appendChild(img);
 	imgContainer.dataset.uploaded = 1;
 
 	let newBtn = document.getElementById('new');
@@ -282,4 +231,8 @@ function	uploadImageToCanvas(element) {
 	saveBtn.addEventListener('click', function() {
 		save();
 	});
+}
+
+function	load_images() {
+	
 }

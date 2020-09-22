@@ -3,20 +3,37 @@
 	<head>
 	</head>
 	<body>
-		<h2>Log in</h2>
+		<div class="d-flex p-2 justify-content-center align-content-around">
+		<table>
 		<form action="" method="post">
-			Username: <input type="text" name="login" value="" />
-			<br />
-			Password: <input type="password" name="passwd" value="" />
-			<input type="submit" name="connect" value="Log in" />
+			<tr>
+				<th colspan="2" style="margin: 30px;">Log in</th>
+			</tr>
+			<tr>
+                <td>Username</td>
+                <td><input style="margin: 10px;" type="text" name="login" value="" /></td>
+			</tr>
+			<tr>
+                <td>Password</td>
+                <td><input style="margin: 10px;" type="password" name="passwd" value="" /></td>
+			</tr>
+			<tr>
+                <td></td>
+                <td><input style="margin: 10px;" type="submit" name="connect" value="Log in" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><a href="index.php?page=account/reset_pass">Forgot your password?</a></td>
+			</tr>
 		</form>
-		<a href="index.php?page=account/reset_pass">Forgot your password?</a>
+		</table>
+	</div>
 	</body>
 </html>
 
 <?php
-	include '../config/connect.php';
-	include 'validation.php';
+	include_once 'config/connect.php';
+	include_once 'validation.php';
 	session_start();
 
 	$submit = $_POST['connect'];
@@ -32,7 +49,7 @@
 			$v = $res['verified'];
 			$hash = $res['password'];
 
-			if ($v !== '1') {
+			if ($v === '0') {
 				echo "You haven't activated your account yet.<br>Follow the link that has been sent to your email or<br>send a new link.";
 				return FALSE;
 			}

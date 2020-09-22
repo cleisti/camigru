@@ -56,6 +56,7 @@
 			$add_like = "INSERT INTO likes(like_user_id, like_img_id) VALUES(:username, :img_id);";
 			$stmt = $pdo->prepare($add_like);
 			$stmt->execute(array(':username' => $user_id, ':img_id' => $img_id));
+			
 			$json['success'] = true;
 		}
 		else {

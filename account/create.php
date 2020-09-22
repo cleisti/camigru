@@ -3,28 +3,47 @@
 <head>
 </head>
     <body>
-        <h2>Create account</h2>
+        <div class="d-flex p-2 justify-content-center align-content-around">
+        <table>
         <form action="" method="post">
-            Email: <input type="email" name="email" value="" required />
-			Username: <input type="text" name="login" minlength="4" maxlength="25" value="" required />
-            <br />
-            Password: <input type="password" name="passwd" minlength="8" maxlength="20" value="" required />
-            <br />
-            Validate password: <input type="password" name="validate_pw" minlength="8" maxlength="20" value="" required />
-            <input type="submit" name="submit" value="Create" />
+            <tr style="margin: 30px;">
+                <th colspan="2">Create account</th>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input style="margin: 10px;" type="email" name="email" value="" required /></td>
+            </tr>
+            <tr>
+                <td>Username</td>
+                <td><input style="margin: 10px;" type="text" name="login" minlength="4" maxlength="25" value="" required /></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input style="margin: 10px;" type="password" name="passwd" minlength="8" maxlength="20" value="" required /></td>
+            </tr>
+            <tr>
+                <td>Password</td>
+                <td><input style="margin: 10px;" type="password" name="validate_pw" minlength="8" maxlength="20" value="" required /></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><input style="margin: 10px;" type="submit" name="submit" value="Create" /></td>
+            </tr>
         </form>
+        </table>
         <br />
+</div>
     </body>
 </html>
 
 <?php
-    include_once '../config/connect.php';
+    include_once 'config/connect.php';
     include_once 'account/validation.php';
     session_start();
 
     $submit = $_POST['submit'];
     $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+    $username = filter_var(htmlentities($_POST['login']), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     $passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
     $validate_pw = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
 

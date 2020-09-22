@@ -3,14 +3,27 @@
 	<head>
 	</head>
 	<body>
-		<h2>Reset your password</h2>
-		<form action="" method="post">
-			E-mail: <input type="email" name="email" value="" />
-			<br />or
-			<br />
-			Username: <input type="text" name="login" minlength="4" maxlength="25" value="" />
-			<input type="submit" name="send" value="Send" />
-		</form>
+	<div class="d-flex p-2 justify-content-center align-content-around">
+	<table class="table-condensed table-responsive">
+        <form action="" method="post" enctype="multipart/form-data">
+            <tr>
+				<th colspan="2">Reset your password</th>
+            </tr>
+            <tr>
+				<td>E-mail</td>
+                <td><input style="margin: 10px;" type="email" name="email" value="" /></td>
+            </tr>
+            <tr>
+				<td>Username</td>
+				<td><input style="margin: 10px;" type="text" name="login" minlength="4" maxlength="25" value="" /></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input style="margin: 10px;" type="submit" name="send" value="Send" /></td>
+			</tr>
+	</form>
+</table>
+</div>
 	</body>
 </html>
 
@@ -57,11 +70,10 @@
 					$stmt->execute(array(':reset' => $reset, ':id' => $id));
 					$stmt->close;
 					echo "Activation link sent to $email.";
-					return (1);
+					header("refresh:5;url=index.php?page=account/login");
                 }
                 else {
                     echo "Unable to send activation link.";
-                    return (0);
                 }
 			}
             else {

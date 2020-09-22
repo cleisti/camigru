@@ -32,6 +32,7 @@
 				$stmt = $pdo->prepare($reset);
 				$stmt->execute(array(':id' => $id, 'password' => $hashed, ':zero' => 0));
 				echo "Password reset. Redirecting to login page . . .";
+				header("refresh:5;url=index.php?page=account/login");
 			}
 			else {
 				echo "This link is not valid anymore.";

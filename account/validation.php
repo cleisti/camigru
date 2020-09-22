@@ -69,4 +69,14 @@ function    input_is_valid($email, $username, $passwd, $validate_pw) {
 	return (1);
 }
 
+function	fetch_uId($username) {
+	$pdo = connect();
+	$get_id = "SELECT user_id FROM users WHERE username = :username;";
+	$stmt = $pdo->prepare($get_id);
+	$stmt->execute(array(':username' => $username));
+	$res = $stmt->fetch(PDO::FETCH_ASSOC);
+	$id = $res['user_id'];
+	return $id;
+}
+
 ?>

@@ -1,40 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-    <body>
-		<h3>Change username</h3>
-        <form action="" method="post">
-            New username:<br />
-			<input type="text" name="new_un" minlength="4" maxlength="25" value="" required /><br />
-            <input class="button" type="submit" name="submit" value="Change username" />
-        </form>
-		<h3>Change email-address</h3>
-        <form action="" method="post">
-            New email:<br />
-			<input type="email" name="new_email" value="" required /><br />
-			Validate email:<br />
-			<input type="email" name="validate_email" value="" required /><br />
-            <input class="button" type="submit" name="submit" value="Change email" />
-        </form>
-        <h3>Change password</h3>
-        <form action="" method="post">
-            Old password:<br />
-			<input type="password" name="old_pw" minlength="8" maxlength="20" value="" required />
-			<br />
-			New password:<br />
-			<input type="password" name="new_pw" minlength="8" maxlength="20" value="" required />
-			<br />
-            Validate password:<br />
-			<input type="password" name="validate_pw" minlength="8" maxlength="20" value="" required /><br />
-            <input class="button" type="submit" name="submit" value="Change password" />
-        </form>
-        <br />
-    </body>
-</html>
-
 <?php
 	include_once '../config/connect.php';
+	include_once 'validation.php';
 	session_start();
 
 	$submit = $_POST['submit'];
@@ -86,11 +52,11 @@
 			$headers = 'From: admin@camigru.com' . "\r\n";
 			$_SESSION['logged_user'] = $new_un;
 			if (mail($email, $subject, $content, $headers)) {
-				echo "Username successfully changed. Notification sent to $email.";
+				// echo "Username successfully changed. Notification sent to $email.";
 
 			}
 			else {
-				echo "Username successfully changed. Couldn't send notification to $email. Is the address correct?";
+				// echo "Username successfully changed. Couldn't send notification to $email. Is the address correct?";
 			}
 		}
 		catch (PDOException $e) {
@@ -140,7 +106,7 @@
 			echo "ERROR: " . getMessage($e);
 		}
 		if (send_mail($new_email, $token, $pdo)) {
-			echo "Verification email sent to $new_email. You need to verify your email before logging back in.";
+			// echo "Verification email sent to $new_email. Redirecting to the login page.";
         }
 	}
 
@@ -157,29 +123,31 @@
 				change_password($info, $user, $pdo);
 				unset($_POST);
 				unset($info);
-				$_SESSION['logged_user'] = "";
-				header("refresh:5;url=index.php?page=account/login");
+				// $_SESSION['logged_user'] = "";
+				header("refresh:3;url=../index.php?page=account/logout");
 			}
 		}
 
 		else if ($submit === "Change username") {
 
 			$pdo = connect();
-			$new_un = filter_var($_POST['new_un'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+			$new_un = $_POST['new_un'];
 			
 			if ($new_un === $_SESSION['logged_user']) {
 				echo "This already is your username . . .";
 			}
 			else if (!$mess = user_exists(NULL, $new_un, $pdo)) {
 				if (input_is_valid(NULL, $new_un, NULL, NULL)) {
+					
 					update_username($new_un, $user, $pdo);
 					unset($_POST);
-					$_SESSION['logged_user'] = "";
-					header("refresh:5;url=index.php?page=account/login");
+					// $_SESSION['logged_user'] = "";
+					header("refresh:1;url=../index.php?page=profile");
 				}
 			}
 			else {
 				echo $mess;
+				header("refresh:3;url=../index.php?page=profile");
 			}
 		}
 
@@ -194,8 +162,8 @@
 					if (input_is_valid($new_email, NULL, NULL, NULL)) {
 						update_email($new_email, $user, $pdo);
 						unset($_POST);
-						$_SESSION['logged_user'] = "";
-						header("refresh:5;url=index.php?page=account/login");
+						// $_SESSION['logged_user'] = "";
+						header("refresh:5;url=../index.php?page=profile");
 					}
 				}
 				else {
@@ -205,6 +173,38 @@
 			else {
 				echo "Check spelling.";
 			}
+		}
+
+		else if ($_POST['notifications']) {
+			$pdo = connect();
+			$id = $_POST['notifications'];
+			$query = "SELECT verified FROM users WHERE user_id = :userId;";
+			$stmt = $pdo->prepare($query);
+			$stmt->execute(array(':userId' => $id));
+			$res = $stmt->fetchColumn();
+
+			if ($res == 1) {
+				$query = "UPDATE users SET verified = :two WHERE user_id = :userId;";
+				$stmt = $pdo->prepare($query);
+				$stmt->execute(array(':two' => 2, ':userId' => $id));
+			}
+			else {
+				$query = "UPDATE users SET verified = :one WHERE user_id = :userId;";
+				$stmt = $pdo->prepare($query);
+				$stmt->execute(array(':one' => 1, ':userId' => $id));
+			}
+			echo $res;
+		}
+
+		else if ($_POST['checkboxInfo']) {
+			$pdo = connect();
+			$id = $_POST['checkboxInfo'];
+			$query = "SELECT verified FROM users WHERE user_id = :userId;";
+			$stmt = $pdo->prepare($query);
+			$stmt->execute(array(':userId' => $id));
+			$res = $stmt->fetchColumn();
+
+			echo $res;
 		}
 	}
 

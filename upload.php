@@ -1,7 +1,10 @@
 <?php
 include_once 'config/connect.php';
-
+session_start();
 $username = $_SESSION['logged_user'];
+if (!$username || $username == "") {
+    header('Location: index.php?page=account/login');
+}
 $id = $_SESSION['user_id'];
 // $submit = $_POST['submit'];
 
@@ -43,6 +46,7 @@ $id = $_SESSION['user_id'];
 // }
 
 try {
+  $pdo = connect();
   $fetch_images = "SELECT * FROM images WHERE img_user_id = :user_id ORDER BY created DESC;";
   $stmt = $pdo->prepare($fetch_images);
   $stmt->execute(array(':user_id' => $id));
@@ -65,7 +69,7 @@ catch (PDOException $e) {
 </head>
 <body>
 <h2 style="text-align: center;">Create</h2>
-<div class="d-inline-flex flex-wrap align-content-center justify-content-center">
+<div class="d-inline-flex flex-column align-content-center justify-content-center">
     <div id="filters" style="margin: 20px;">
       <img class="filter" src="filters/bwnoise.png" id="bwnoise" data-clickcount="0">
       <img class="filter" src="filters/flowers.png" id="flowers" data-clickcount="0">

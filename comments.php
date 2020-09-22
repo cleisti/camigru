@@ -1,4 +1,8 @@
 <?php
+	// error_reporting(-1);
+	// ini_set('display_errors', 'On');
+	// set_error_handler("var_dump");
+
 	include_once 'config/connect.php';
 	session_start();
 	$username = $_SESSION['logged_user'];
@@ -24,66 +28,103 @@
         }
 	}
 
-	function	get_comments($img_id, $pdo) {
-		$comments = "SELECT count(comment_id) AS nb_comments FROM comments WHERE comment_img_id = :img_id;";
+	function	get_comments($imageId) {
+		$pdo = connect();
+		$comments = "SELECT count(comment_id) FROM comments WHERE comment_img_id = :imageId;";
 		$stmt = $pdo->prepare($comments);
-		$stmt->bindValue('img_id', $img_id, PDO::PARAM_INT);
+		$stmt->bindValue('imageId', $imageId, PDO::PARAM_INT);
 		$stmt->execute();
 		$res = $stmt->fetchColumn();
 		return ($res);
 	}
 
-	if (isset($_POST['img_id'])) {
-
-		if (!$username || $username == "") {
-			$json['success'] = false;
-			$json['err_mess'] = "You have to be logged in to like.";
-			echo json_encode($json);
-			exit;
-		} 
-		$pdo = connect();
-		$img_id = $_POST['img_id'];
-		$user_id = get_id($username, $pdo);
-
-		$liked = "SELECT like_id FROM likes WHERE like_user_id = :username AND like_img_id = :img_id;";
-		$stmt = $pdo->prepare($liked);
-		$stmt->execute(array(':username' => $user_id, 'img_id' => $img_id));
-		$res = $stmt->fetchColumn();
-
-		// echo $res;
-
-		if (!$res) {
-			$add_like = "INSERT INTO likes(like_user_id, like_img_id) VALUES(:username, :img_id);";
-			$stmt = $pdo->prepare($add_like);
-			$stmt->execute(array(':username' => $user_id, ':img_id' => $img_id));
-			$json['success'] = true;
-		}
-		else {
-			$remove_like = "DELETE FROM likes WHERE like_user_id = :username AND like_img_id = :img_id;";
-			$stmt = $pdo->prepare($remove_like);
-			$stmt->execute(array(':username' => $user_id, 'img_id' => $img_id));
-			$json['success'] = true;
-		}
-
-		$likes = "SELECT count(like_id) AS nb_likes FROM likes WHERE like_img_id = :img_id;";
-		$stmt = $pdo->prepare($likes);
-		$stmt->bindValue('img_id', $img_id, PDO::PARAM_INT);
-		$stmt->execute();
-		$res = $stmt->fetchColumn();
-		$json['likes_total'] = get_likes($img_id, $pdo);
-
-		echo json_encode($json);
-		
-		// add_like($img_id, $pdo);
-
-	}
-
 	if (isset($_POST['nb_comments'])) {
-		$pdo = connect();
-		$nb_comments = $_POST['nb_comments'];
+		$imageId = $_POST['nb_comments'];
 		$json = array();
 
-		$json['comments_total'] = get_comments($nb_comments, $pdo);
+		$json['comments_total'] = get_comments($imageId);
+
+		echo json_encode($json);
+	}
+
+	function	fetchAllComments($imageId) {
+		$pdo = connect();
+		try {
+			$query = "SELECT comments.*, users.username AS uname FROM comments INNER JOIN users ON comments.comment_user_id = users.user_id WHERE comment_img_id = :imageId ORDER BY comments.comment_id ASC;";
+			$stmt = $pdo->prepare($query);
+			$stmt->bindValue('imageId', $imageId, PDO::PARAM_INT);
+			$stmt->execute();
+			$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		catch (PDOException $e) {
+			echo "Error: " . getMessage($e);
+		}
+		if ($comments) {
+			return $comments;
+		}
+		else {
+			$json = array();
+			$json['err_mess'] = "No comments yet";
+			return $json;
+		}
+	}
+
+	if (isset($_POST['allComments'])) {
+		$imageId = $_POST['allComments'];
+		$allComments = fetchAllComments($imageId);
+
+		echo json_encode($allComments);
+	}
+
+	if (isset($_POST['newComment'])) {
+		$imageId = $_POST['img_id'];
+		$comment = htmlentities($_POST['newComment']);
+
+		// if (length($comment) > 255)
+
+		try {
+			if ($username && $username != "") {
+				$pdo = connect();
+				$userId = get_id($username, $pdo);
+				$insert_comment = "INSERT INTO comments(`comment_user_id`, `comment_img_id`, `comment`, `date`)
+									VALUES (:userId, :imgId, :comment, :date);";
+				$stmt = $pdo->prepare($insert_comment);
+				$stmt->execute(array(':userId' => $userId, ':imgId' => $imageId, ':comment' => $comment, ':date' => date('Y-m-d H:i:s')));
+				
+				$get_email = "SELECT users.email AS mailAddr, users.verified AS verified FROM users INNER JOIN images ON users.user_id = images.img_user_id WHERE img_id = :imageId;";
+				$stmt = $pdo->prepare($get_email);
+				$stmt->execute(array(':imageId' => $imageId));
+				$res = $stmt->fetch(PDO::FETCH_ASSOC);
+
+				if ($res['verified'] == 2) {
+					$email = $res['mailAddr'];
+					$subject = "A new comment on you picture";
+					$content = $username . " commented on your image:<br><br>" . $comment;
+					$headers = 'From: admin@camigru.com' . "\r\n";
+					// $headers = implode("\r\n", $headers);
+					if (mail($email, $subject, $content, $headers)) {
+						$json['success'] = true;
+						$json['err_mess'] = "Mail is sent";
+					}
+					else {
+						$json['success'] = false;
+						$json['err_mess'] = "Something went wrong";
+					}
+				}
+				else {
+					$json['success'] = true;
+					$json['err_mess'] = "No mail sent";
+				}
+				
+			}
+			else {
+				$json['success'] = false;
+				$json['err_mess'] = "You have to be logged in to comment";
+			}
+		}
+		catch (PDOException $e) {
+			echo "Error: " . getMessage($e);
+		}
 
 		echo json_encode($json);
 	}
