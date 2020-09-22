@@ -21,7 +21,7 @@
 	</head>
 	<body style="margin-top: 20px;">
 		<header>
-			<nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light">
+			<nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light" style="padding-left: 25vw;">
 				<a class="navbar-brand" href="index.php?page=gallery">Camigru</a>
 				<input type="checkbox" id="lua-navbar-toggler" class="d-none" />
 				<label for="lua-navbar-toggler" class="navbar-toggler" data-toggle="collapse" data-target="#lua-navbar-content" aria-controls="lua-navbar-content" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
 			  	</div>
 			</nav>
 		</header>
-		<div class="container" style="position: relative; padding-top: 50px;">
+		<div style="position: relative; padding-top: 50px; min-height: 89vh;">
 				<?php
 					if (isset($_GET['page']) && $_GET['page'] != '')
 						$page = $_GET['page'];
@@ -61,7 +61,7 @@
 				?>
 		</div>
 		<footer class="page-footer">
-			<nav class="navbar fixed-bottom navbar-light bg-light">©cleisti 2020</nav>
+			<nav class="navbar navbar-light bg-light"><p>© <a href="http://www.github.com/cleisti/">cleisti</a> 2020</p></nav>
 		</footer>
 	</body>
 </html>

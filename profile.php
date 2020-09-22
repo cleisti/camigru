@@ -178,18 +178,6 @@ input:checked + .slider:before {
                 <td><input class="button" type="submit" name="submit" value="Change password" /></td>
             </tr>
             </form>
-            <tr>
-                <th>Full name</th>
-                <td>test</td>
-            </tr>
-            <tr>
-                <th>Phone number</th>
-                <td>000-000-000-00</td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td>test</td>
-            </tr>
         </table>
 </div>
     </body>

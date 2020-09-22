@@ -56,23 +56,9 @@ var canvasData = null;
 				selectFilter(this);
 			});
 		});
-
-		let image_divs = document.querySelectorAll('#gallery div');
-		console.log(image_divs);
-
-		image_divs.forEach(function(div) {
-			let remove = document.createElement('img');
-			remove.setAttribute('class', 'remove');
-			remove.setAttribute('src', 'icons/trash.png');
-			remove.addEventListener('click', function() {
-				remove_image(this);
-			})
-			div.appendChild(remove);
-		})
 	}
 	
 	window.addEventListener('load', startup, false);
-	window.addEventListener('load', load_images, false);
 })();
 
 function	takepicture() {
@@ -88,7 +74,7 @@ function	takepicture() {
 		let newPhoto = document.createElement('img');
 		newPhoto.setAttribute('width', width);
 		newPhoto.setAttribute('height', height);
-		newPhoto.setAttribute('src', canvasData);
+		newPhoto.setAttribute('src', canvasData)
 	
 		imgContainer.appendChild(newPhoto);
 		let camera = document.getElementById('camera');
@@ -113,7 +99,6 @@ function	takepicture() {
 }
 
 function	selectFilter(element) {
-	console.log(element.width);
 	var imgContainer = document.getElementById('photo');
 	
 	if (element.dataset.clickcount == 0 && width && height) {
@@ -161,10 +146,11 @@ function	save() {
 		var xhttp = new XMLHttpRequest();
 		xhttp.open('POST', 'save.php', true);
 		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-		if (xhttp.status == 200) {
-			console.log(xhttp.responseText);
-			update_gallery();
-		}
+		xhttp.onload = function() {
+			if (xhttp.status == 200) {
+				load_images();
+			}
+		};
 		xhttp.send('filter=' + filters + '&image=' + canvasData + '&uploaded=' + uploaded);
 }
 
@@ -197,10 +183,11 @@ function	remove_image(element) {
 	var xhttp = new XMLHttpRequest();
 	xhttp.open('POST', 'remove.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-	if (xhttp.status == 200) {
-		console.log(xhttp.responseText);
-		update_gallery(); // create this function
-	}
+	xhttp.onload = function() {
+		if (xhttp.status == 200) {
+			load_images();
+		}
+	};
 	xhttp.send('img_id=' + image.id);
 }
 
@@ -234,5 +221,22 @@ function	uploadImageToCanvas(element) {
 }
 
 function	load_images() {
-	
+	let xhttp = new XMLHttpRequest();
+	xhttp.open('POST', 'getimages.php', true);
+	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
+	xhttp.onload = function () {
+		if (xhttp.status == 200) {
+			let images = JSON.parse(xhttp.response);
+			let gallery = document.getElementById('gallery');
+			gallery.innerHTML = "";
+			images.forEach(image => {
+				gallery.innerHTML += "<div class='card' style='margin: 5px; max-width: 150px;'>" +
+				"<img class='card-img-top' name='image' id='" + image.img_id +
+				"' src='" + image.path + "'><div class='remove' src='icons/trash' onclick='remove_image(this)'></div></div>";
+			})
+		}
+	};
+	xhttp.send('get_images=1');
 }
+
+window.addEventListener('load', load_images, false);

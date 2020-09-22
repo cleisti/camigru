@@ -60,7 +60,7 @@ function	resize() {
 	let c = document.getElementById('allComments');
 	if (document.getElementById('popup').style.display == 'flex') {
 		let imgHeight = document.getElementById('bigImage').height;
-		c.style.height = (window.innerWidth > 575) ? imgHeight - 130 + 'px': window.innerHeight - imgHeight - 220 + 'px';
+		c.style.height = (window.innerWidth > 575) ? imgHeight - 130 + 'px': window.innerHeight - imgHeight - 200 + 'px';
 		console.log(window.innerHeight)
 		console.log(c.style.height);
 		console.log(imgHeight);

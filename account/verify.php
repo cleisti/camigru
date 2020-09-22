@@ -28,8 +28,8 @@
 							WHERE user_id = :id;";
 				$stmt = $pdo->prepare($validate);
 				$stmt->execute(array(':v' => 1, ':zero' => 0, ':id' => $id));
-				echo "Validation successfull. Log in.";
-				header("refresh:5;url=index.php?page=account/login");
+				echo "Validation successfull. You can log in now.";
+				header("refresh5;url=index.php?page=account/login");
 			}
 			else {
 				echo "Unable to validate email.";

@@ -1,21 +1,19 @@
 <?php
 	include_once 'config/connect.php';
+	session_start();
+	$id = $_SESSION['user_id'];
 
-	function	fetch_images() {
-		$pdo = connect();
-
-		$fetch_images = "SELECT * FROM images;";
-		$stmt = prepare($fetch_images);
-		$stmt->execute();
-		$res = $stmt(PDO::FETCH_ASSOC);
-		$paths = $res['path'];
-		return $paths;
-	}
-
-	$images = fetch_images();
-	print_r($images);
-	$len = len($images);
-	for ($i = 0; $i < $len; $i++) {
-		echo "<img src=" . $images[$i] . ">";
+	if ($_POST['get_images']) {
+		try {
+		  $pdo = connect();
+		  $fetch_images = "SELECT * FROM images WHERE img_user_id = :user_id ORDER BY created DESC;";
+		  $stmt = $pdo->prepare($fetch_images);
+		  $stmt->execute(array(':user_id' => $id));
+		  $images = $stmt->fetchALL(PDO::FETCH_ASSOC);
+		  echo json_encode($images);
+		}
+		catch (PDOException $e) {
+		  echo "Error: " . getMessage($e);
+		} 
 	}
 ?>
