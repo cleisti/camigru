@@ -16,10 +16,10 @@
 		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/ico" href="favicon.ico"/>
 	</head>
-	<body style="margin-top: 20px;">
+	<body>
 		<header>
 			<nav class="navbar fixed-top navbar-expand-sm navbar-light bg-light" style="padding-left: 25vw;">
-				<a class="navbar-brand" href="index.php?page=gallery">Camigru</a>
+				<a class="navbar-brand" href="index.php?page=gallery"><img src="camigruLogo.png" style="width: 120px"></a>
 				<input type="checkbox" id="lua-navbar-toggler" class="d-none" />
 				<label for="lua-navbar-toggler" class="navbar-toggler" data-toggle="collapse" data-target="#lua-navbar-content" aria-controls="lua-navbar-content" aria-expanded="false" aria-label="Toggle navigation">
       				<span class="navbar-toggler-icon"></span>
@@ -35,10 +35,10 @@
 						</li>
 			<?php }	else { ?>
 						<li class="nav-item">
-							<a class="navbar-brand" href="index.php?page=profile">Profile</a>
+							<a class="navbar-brand" href="index.php?page=upload">Create</a>
 						</li>
 						<li class="nav-item">
-							<a class="navbar-brand" href="index.php?page=upload">New image</a>
+							<a class="navbar-brand" href="index.php?page=profile">Profile</a>
 						</li>
 						<li class="nav-item">
 							<a class="navbar-brand" style="align-self: right;" href="index.php?page=account/logout">Log out</a>
@@ -48,7 +48,7 @@
 			  	</div>
 			</nav>
 		</header>
-		<div style="position: relative; padding-top: 50px; min-height: 89vh;">
+		<div style="position: relative; padding-top: 70px; min-height: 89vh;">
 				<?php
 					if (isset($_GET['page']) && $_GET['page'] != '')
 						$page = $_GET['page'];

@@ -168,6 +168,7 @@
 			}
 			else {
 				echo "Check spelling.";
+				header("refresh:3;url=../index.php?page=profile");
 			}
 		}
 

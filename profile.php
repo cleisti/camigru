@@ -60,8 +60,8 @@
     <table>
         <tr rowspan="2">
             <td><img class="img-circle" style="width: 100px;" src="<?php if ($profile_pic)
-                        echo $profile_pic ?>"></td>
-            <th>@<?=$username ?></th>
+                        echo $profile_pic ?>"></td> 
+            <th><h2><?=$username ?></h2></th>
         </tr>
         <form action="account/user_functions.php" method="post">
             <tr>
