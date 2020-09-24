@@ -3,7 +3,6 @@
 	session_start();
 
 	$username = $_SESSION['logged_user'];
-	// $id = $_SESSION['user_id'];
 	$img_id = $_POST['img_id'];
 
 	function    get_id($username, $pdo) {
@@ -25,8 +24,14 @@
 		$pdo = connect();
 		$id = get_id($username, $pdo);
 
-		$remove_pic = "DELETE FROM images WHERE img_id = :img_id AND img_user_id = :user_id;";
+		$path = "SELECT path FROM images WHERE img_id = :img_id AND img_user_id = :userId;";
+		$stmt = $pdo->prepare($path);
+		$stmt->execute(array(':img_id' => $img_id, ':userId' => $id));
+		$res = $stmt->fetchColumn();
+		unlink($res);
+
+		$remove_pic = "DELETE FROM images WHERE img_id = :img_id AND img_user_id = :userId;";
 		$stmt = $pdo->prepare($remove_pic);
-		$stmt->execute(array(':img_id' => $img_id, ':user_id' => $id));
+		$stmt->execute(array(':img_id' => $img_id, ':userId' => $id));
 	}
 ?>

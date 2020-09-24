@@ -1,5 +1,5 @@
 <?php
-	session_start();
+	// session_start();
 	$_SESSION['logged_user'] = "";
 	$_SESSION['user_id'] = "";
 	session_destroy();

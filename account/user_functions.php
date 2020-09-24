@@ -2,8 +2,6 @@
 	include_once '../config/connect.php';
 	include_once 'validation.php';
 	session_start();
-
-	$submit = $_POST['submit'];
 	$user = $_SESSION['logged_user'];
 
 	function		change_password($info, $user, $pdo) {
@@ -24,10 +22,10 @@
 				$stmt = $pdo->prepare($change_pass);
 				$stmt->execute(array(':password' => $hashed, ':username' => $user));
 				echo "Password successfully changed. Redirecting to log in page . . .";
+				return true;
 			}
 			else {
-				echo "Wrong password";
-				exit;
+				return false;
 			}
 		}
 		catch (PDOException $e) {
@@ -51,13 +49,7 @@
 			$subject = "Username changed";
 			$headers = 'From: admin@camigru.com' . "\r\n";
 			$_SESSION['logged_user'] = $new_un;
-			if (mail($email, $subject, $content, $headers)) {
-				// echo "Username successfully changed. Notification sent to $email.";
-
-			}
-			else {
-				// echo "Username successfully changed. Couldn't send notification to $email. Is the address correct?";
-			}
+			mail($email, $subject, $content, $headers);
 		}
 		catch (PDOException $e) {
 			echo "ERROR: " . getMessage($e);
@@ -105,30 +97,32 @@
 		catch (PDOException $e) {
 			echo "ERROR: " . getMessage($e);
 		}
-		if (send_mail($new_email, $token, $pdo)) {
-			// echo "Verification email sent to $new_email. Redirecting to the login page.";
-        }
+		send_mail($new_email, $token, $pdo);
 	}
 
 	if (isset($user)) {
 
-		if ($submit === 'Change password') {
+		if ($_POST['submit'] === 'Change password') {
 
-			$info['old_pw'] = filter_var($_POST['old_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-			$info['new_pw'] = filter_var($_POST['new_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-			$info['validate_pw'] = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+			$info['old_pw'] = $_POST['old_pw'];
+			$info['new_pw'] = $_POST['new_pw'];
+			$info['validate_pw'] = $_POST['validate_pw'];
 
 			if (input_is_valid(NULL, NULL, $info['new_pw'], $info['validate_pw'])) {
 				$pdo = connect();
-				change_password($info, $user, $pdo);
-				unset($_POST);
-				unset($info);
-				// $_SESSION['logged_user'] = "";
-				header("refresh:3;url=../index.php?page=account/logout");
+				if (change_password($info, $user, $pdo)) {
+					unset($_POST);
+					unset($info);
+					header("refresh:3;url=../index.php?page=account/logout");
+				}
+				else {
+					echo "Wrong password";
+					header("refresh:3;url=../index.php?page=profile");
+				}
 			}
 		}
 
-		else if ($submit === "Change username") {
+		else if ($_POST['submit'] === "Change username") {
 
 			$pdo = connect();
 			$new_un = $_POST['new_un'];
@@ -141,7 +135,6 @@
 					
 					update_username($new_un, $user, $pdo);
 					unset($_POST);
-					// $_SESSION['logged_user'] = "";
 					header("refresh:1;url=../index.php?page=profile");
 				}
 			}
@@ -151,7 +144,7 @@
 			}
 		}
 
-		else if ($submit === "Change email") {
+		else if ($_POST['submit'] === "Change email") {
 
 			$pdo = connect();
 			$new_email = filter_var($_POST['new_email'], FILTER_SANITIZE_EMAIL);
@@ -162,8 +155,7 @@
 					if (input_is_valid($new_email, NULL, NULL, NULL)) {
 						update_email($new_email, $user, $pdo);
 						unset($_POST);
-						// $_SESSION['logged_user'] = "";
-						header("refresh:5;url=../index.php?page=profile");
+						header("refresh:1;url=../index.php?page=profile");
 					}
 				}
 				else {
@@ -210,6 +202,6 @@
 
 	else {
 		echo "You are not authorized to access this page.";
-		header("Location: index.php");
+		header("refresh:3;url=../index.php?page=account/logout");
 	}
 ?>

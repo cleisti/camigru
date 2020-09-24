@@ -20,7 +20,6 @@ var canvasData = null;
 	  navigator.mediaDevices.getUserMedia({video: true, audio: false})
 	  .then(function(stream) {
 		video.srcObject = stream;
-		// video.setAttribute('style', 'filter: contrast(300%);');
 		video.play();
 	  })
 	  .catch(function(err) {
@@ -95,6 +94,7 @@ function	takepicture() {
 			save();
 		});
 		index++;
+		document.getElementById('filters').style.display = 'none';
 	}
 }
 
@@ -102,7 +102,7 @@ function	selectFilter(element) {
 	var imgContainer = document.getElementById('photo');
 	
 	if (element.dataset.clickcount == 0 && width && height) {
-		element.setAttribute('style', 'border: 2px solid red;');
+		element.setAttribute('style', 'border: 2px solid black;');
 		let selectedFilters = document.querySelector('#selectedFilters');
 		let filter = document.createElement('img');
 		filter.setAttribute('name', element.id);
@@ -152,6 +152,7 @@ function	save() {
 			}
 		};
 		xhttp.send('filter=' + filters + '&image=' + canvasData + '&uploaded=' + uploaded);
+		newPicture();
 }
 
 function	newPicture() {
@@ -173,6 +174,7 @@ function	newPicture() {
 		save()
 	});
 	saveBtn.style.display = 'none';
+	document.getElementById('filters').style.display = 'flex';
 }
 
 function	remove_image(element) {

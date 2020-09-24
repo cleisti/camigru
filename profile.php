@@ -1,8 +1,5 @@
 <?php
-    include_once 'config/connect.php';
-    // include 'account/user_functions.php';
     include_once 'account/validation.php';
-    session_start();
 
     $username = $_SESSION['logged_user'];
     if (!$username || $username == "") {
@@ -20,9 +17,8 @@
     }
 
     $email = fetch_email($username);
-    $submit = $_POST['submit'];
 
-    if ($submit === "Upload Image") {
+    if ($_POST && $_POST['submit'] === "Upload Image") {
 
         $name = $_FILES['image']['name'];
         $target_dir = "upload/";
@@ -55,68 +51,7 @@
 <html>
 <head>
     <script src="profile.js"></script>
-    <style>
-        table th {
-            height: 50px;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 40px;
-            height: 20px;
-            }
-            .switch input { 
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 15px;
-  width: 15px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
-input:checked + .slider {
-  background-color: #2196F3;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(15px);
-  -ms-transform: translateX(15px);
-  transform: translateX(15px);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 20px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-    </style>
-
+    <link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
 </head>
     <body>
         <div class="d-flex p-2 justify-content-center align-content-around">

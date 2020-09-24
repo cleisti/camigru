@@ -61,9 +61,6 @@ function	resize() {
 	if (document.getElementById('popup').style.display == 'flex') {
 		let imgHeight = document.getElementById('bigImage').height;
 		c.style.height = (window.innerWidth > 575) ? imgHeight - 130 + 'px': window.innerHeight - imgHeight - 200 + 'px';
-		console.log(window.innerHeight)
-		console.log(c.style.height);
-		console.log(imgHeight);
 	}
 }
 
@@ -85,7 +82,6 @@ function	like(element) {
 			}
 			else {
 				let error = document.getElementById("error_" + element.name);
-				console.log(result.err_mess);
 				error.innerHTML = result.err_mess;
 				error.style.display = 'block';
 				document.getElementById('errorBox').innerHTML = result.err_mess;
@@ -103,8 +99,6 @@ function	comment(element) {
 	let img_id = element.name;
 	let comment = document.getElementById('newComment').value;
 	document.getElementById('newComment').value = "";
-	console.log(element);
-	console.log(comment);
 	let xhttp = new XMLHttpRequest();
 	xhttp.open('POST', 'comments.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
@@ -112,18 +106,16 @@ function	comment(element) {
 	xhttp.onload = function () {
 		if (xhttp.status == 200) {
 			var result = JSON.parse(xhttp.responseText);
-			if (result.success) { // add success boolean to JSON
+			if (result.success) {
+				document.getElementById("errorBox").style.display = 'none';
 				fetchAllComments(element.name);
 			} else {
-				let error = document.getElementById("error_" + element.name);
+				let error = document.getElementById("errorBox");
 				error.innerHTML = result['err_mess'];
 				error.style.display = 'block';
-				document.getElementById('errorBox').innerHTML = result['err_mess'];
-				document.getElementById('errorBox').style.display = 'block';
 			} 
 		}
 	};
-	console.log('img_id=' + img_id + 'newComment=' + comment);
 	xhttp.send('newComment=' + comment + '&img_id=' + img_id);
 	comment = "";
 }

@@ -34,9 +34,7 @@
 <?php
 	include_once 'config/connect.php';
 	include_once 'validation.php';
-	session_start();
-
-	$submit = $_POST['connect'];
+	// session_start();
 
 	function    auth($username, $passwd, $pdo) {
 		try {
@@ -75,12 +73,12 @@
 		return $id;
 	}
 
-	if ($submit === 'Log in' && isset($_POST['login']) && isset($_POST['passwd'])) {
+	if ($_POST && $_POST['connect'] === 'Log in' && isset($_POST['login']) && isset($_POST['passwd'])) {
 		
 		$pdo = connect();
 
-		$username = filter_var($_POST['login'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-		$passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+		$username = $_POST['login'];
+		$passwd = $_POST['passwd'];
 
 		if (user_exists(NULL, $username, $pdo)) {
 			if (auth($username, $passwd, $pdo) === TRUE) {

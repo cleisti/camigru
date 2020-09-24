@@ -6,6 +6,7 @@
 	include_once 'config/connect.php';
 	session_start();
 	$username = $_SESSION['logged_user'];
+
 	$json = array();
 
 	function is_ajax_request() {
@@ -78,54 +79,47 @@
 
 	if (isset($_POST['newComment'])) {
 		$imageId = $_POST['img_id'];
-		$comment = htmlentities($_POST['newComment']);
+		$comment = $_POST['newComment'];
+		if (strlen($comment) < 2 || strlen($comment) > 255) {
+			$json['success'] = false;
+			$json['err_mess'] = "Comment must be between 2 and 255 characters.";
+		}
+		else {
+			$comment = htmlentities($_POST['newComment']);
 
-		// if (length($comment) > 255)
-
-		try {
-			if ($username && $username != "") {
-				$pdo = connect();
-				$userId = get_id($username, $pdo);
-				$insert_comment = "INSERT INTO comments(`comment_user_id`, `comment_img_id`, `comment`, `date`)
-									VALUES (:userId, :imgId, :comment, :date);";
-				$stmt = $pdo->prepare($insert_comment);
-				$stmt->execute(array(':userId' => $userId, ':imgId' => $imageId, ':comment' => $comment, ':date' => date('Y-m-d H:i:s')));
-				
-				$get_email = "SELECT users.email AS mailAddr, users.verified AS verified FROM users INNER JOIN images ON users.user_id = images.img_user_id WHERE img_id = :imageId;";
-				$stmt = $pdo->prepare($get_email);
-				$stmt->execute(array(':imageId' => $imageId));
-				$res = $stmt->fetch(PDO::FETCH_ASSOC);
-
-				if ($res['verified'] == 2) {
-					$email = $res['mailAddr'];
-					$subject = "A new comment on you picture";
-					$content = $username . " commented on your image:<br><br>" . $comment;
-					$headers = 'From: admin@camigru.com' . "\r\n";
-					// $headers = implode("\r\n", $headers);
-					if (mail($email, $subject, $content, $headers)) {
-						$json['success'] = true;
-						$json['err_mess'] = "Mail is sent";
+			try {
+				if ($username && $username != "") {
+					$pdo = connect();
+					$userId = get_id($username, $pdo);
+					$insert_comment = "INSERT INTO comments(`comment_user_id`, `comment_img_id`, `comment`, `date`)
+										VALUES (:userId, :imgId, :comment, :date);";
+					$stmt = $pdo->prepare($insert_comment);
+					$stmt->execute(array(':userId' => $userId, ':imgId' => $imageId, ':comment' => $comment, ':date' => date('Y-m-d H:i:s')));
+					
+					$get_email = "SELECT users.email AS mailAddr, users.verified AS verified FROM users INNER JOIN images ON users.user_id = images.img_user_id WHERE img_id = :imageId;";
+					$stmt = $pdo->prepare($get_email);
+					$stmt->execute(array(':imageId' => $imageId));
+					$res = $stmt->fetch(PDO::FETCH_ASSOC);
+	
+					if ($res['verified'] == 2) {
+						$email = $res['mailAddr'];
+						$subject = "A new comment on you picture";
+						$content = $username . " commented on your image:<br><br>" . $comment;
+						$headers = 'From: admin@camigru.com' . "\r\n";
+						mail($email, $subject, $content, $headers);
 					}
-					else {
-						$json['success'] = false;
-						$json['err_mess'] = "Something went wrong";
-					}
+					$json['success'] = true;
+					
 				}
 				else {
-					$json['success'] = true;
-					$json['err_mess'] = "No mail sent";
+					$json['success'] = false;
+					$json['err_mess'] = "You have to be logged in to comment";
 				}
-				
 			}
-			else {
-				$json['success'] = false;
-				$json['err_mess'] = "You have to be logged in to comment";
+			catch (PDOException $e) {
+				echo "Error: " . getMessage($e);
 			}
 		}
-		catch (PDOException $e) {
-			echo "Error: " . getMessage($e);
-		}
-
 		echo json_encode($json);
 	}
 ?>

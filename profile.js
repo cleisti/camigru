@@ -9,7 +9,6 @@ function    getCheckBoxInfo() {
 	xhttp.onload = function () {
 		if (xhttp.status == 200) {
 			var result = JSON.parse(xhttp.responseText);
-			console.log(result);
 			if (result == 1)
 				document.getElementById('notifications').checked = false;
 			else
@@ -28,7 +27,6 @@ function    setNotifications(element) {
 	xhttp.onload = function () {
 		if (xhttp.status == 200) {
 			var result = JSON.parse(xhttp.responseText);
-			console.log(result);
 			if (result == 1)
 				document.getElementById('notifications').checked = true;
 			else

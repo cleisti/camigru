@@ -28,11 +28,9 @@
 </html>
 
 <?php
-	include '../config/connect.php';
+	// include '../config/connect.php';
 	include 'validation.php';
-	session_start();
-
-	$submit = $_POST['send'];
+	// session_start();
 
 	function	get_email($username, $pdo) {
 		try {
@@ -85,7 +83,7 @@
         }
     }
 
-	if ($submit === 'Send' && (isset($_POST['email']) || isset($_POST['login']))) {
+	if ($_POST && $_POST['send'] === 'Send' && (isset($_POST['email']) || isset($_POST['login']))) {
 		
 		$pdo = connect();
 
@@ -101,8 +99,5 @@
 		else {
 			echo "Couldn't find user. Please check spelling or contact customer service.";
 		}
-	}
-	else if ($submit) {
-		echo "Please enter your email or username.";
 	}
 ?>

@@ -2,7 +2,10 @@
 	include 'config/setup.php';
 	session_start();
 
-	$user = $_SESSION['logged_user'] ? $_SESSION['logged_user'] : "";
+	if (isset($_SESSION['logged_user']))
+		$user = $_SESSION['logged_user'];
+	else
+		$user = "";
 ?>
 
 <!DOCTYPE html>
@@ -10,14 +13,9 @@
 	<head>
 		<title>Camigru</title>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<!-- <link rel="stylesheet" type="text/css" href="styles/style.css"> -->
+		<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
 		<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/ico" href="favicon.ico"/>
-		<style>
-			#lua-navbar-toggler:checked ~ .collapse {
-    			display:block;
-			}
-		</style>
 	</head>
 	<body style="margin-top: 20px;">
 		<header>

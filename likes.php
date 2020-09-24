@@ -1,7 +1,11 @@
 <?php
 	include_once 'config/connect.php';
 	session_start();
-	$username = $_SESSION['logged_user'];
+	if (isset($_SESSION['logged_user']))
+		$username = $_SESSION['logged_user'];
+	else
+		$username = "";
+
 	$json = array();
 
 	function is_ajax_request() {
@@ -50,8 +54,6 @@
 		$stmt->execute(array(':username' => $user_id, 'img_id' => $img_id));
 		$res = $stmt->fetchColumn();
 
-		// echo $res;
-
 		if (!$res) {
 			$add_like = "INSERT INTO likes(like_user_id, like_img_id) VALUES(:username, :img_id);";
 			$stmt = $pdo->prepare($add_like);
@@ -74,8 +76,6 @@
 		$json['likes_total'] = get_likes($img_id, $pdo);
 
 		echo json_encode($json);
-		
-		// add_like($img_id, $pdo);
 
 	}
 

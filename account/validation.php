@@ -60,10 +60,14 @@ function    input_is_valid($email, $username, $passwd, $validate_pw) {
 		return (0);
 	}
 
-	if ($passwd && !preg_match('/^(?=.*\d)(?=.*[a-zA-Z]).*[a-z0-9!?@#$%]$/', $passwd)) {
-		echo "Password must contain at least one alphabetical character and one number.<br>The following special characters are allowed: ?, !, @, #, $ and %";
-		if ($passwd !== $validate_pw)
-			echo "Password doesn't match validation. Try again.";
+	if ($passwd && $passwd === $validate_pw) {
+		if (!preg_match('/^(?=.*\d)(?=.*[a-zA-Z])/', $passwd)) {
+			echo "Password must contain at least one alphabetical character and one number.";
+			return (0);
+		}
+	}
+	else {
+		echo "Password doesn't match validation. Try again.";
 		return (0);
 	}
 	return (1);

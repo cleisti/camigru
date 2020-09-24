@@ -1,10 +1,11 @@
 <?php
 	include_once 'config/connect.php';
-	// session_start();
 
 	$pdo = connect();
-	$username = $_SESSION['logged_user'];
-	$id = $_SESSION['user_id'];
+	if (isset($_SESSION['logged_user']))
+		$username = $_SESSION['logged_user'];
+	else
+		$username = "";
 
 	$limit = 6;
 	if (isset($_GET['gallery_page'])) {
@@ -80,7 +81,7 @@
 					<div id="likeBox"></div>
 					<h6 id="commentHeader"></h6>
 					<div id="allComments"></div>
-					<input type="text" id="newComment" placeholder="Add a comment..." minlength="4" maxlength="255" required />
+					<input type="text" id="newComment" placeholder="Add a comment..." required />
 					<input type="submit" id="commentSubmit" class="commentButton">
 				</div>
 				<div id="errorBox" style="display: none;"></div>

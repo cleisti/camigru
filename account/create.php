@@ -39,13 +39,7 @@
 <?php
     include_once 'config/connect.php';
     include_once 'account/validation.php';
-    session_start();
-
-    $submit = $_POST['submit'];
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $username = filter_var(htmlentities($_POST['login']), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-    $passwd = filter_var($_POST['passwd'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
-    $validate_pw = filter_var($_POST['validate_pw'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_LOW);
+    // session_start();
 
     function    send_mail($email, $token, $pdo) {
         try {
@@ -93,13 +87,17 @@
         }
         if (send_mail($email, $token, $pdo)) {
             echo "Activation email sent to $email. Follow the link to activate your account.";
-            $stmt->close();
         }
     }
 
-    if ($submit === 'Create' && $email && $username && $passwd && $validate_pw) {
+    if ($_POST && $_POST['submit'] && $_POST['email'] && $_POST['login'] && $_POST['passwd'] && $_POST['validate_pw']) {
         
         $pdo = connect();
+        $submit = $_POST['submit'];
+        $email = $_POST['email'];
+        $username = $_POST['login'];
+        $passwd = $_POST['passwd'];
+        $validate_pw = $_POST['validate_pw'];
 
         if (!$mess = user_exists($email, $username, $pdo)) {
             if (input_is_valid($email, $username, $passwd, $validate_pw)) {
