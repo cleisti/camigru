@@ -16,7 +16,7 @@
             return $id;
         }
         catch (PDOException $e) {
-            console_log("Error: " . getMessage($e));
+            console_log("Error: " . $e->getMessage());
         }
 	}
 

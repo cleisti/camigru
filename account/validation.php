@@ -1,4 +1,5 @@
 <?php
+// include_once 'config/connect.php';
 
 function    fetch_email($username) {
 	$pdo = connect();
@@ -66,7 +67,7 @@ function    input_is_valid($email, $username, $passwd, $validate_pw) {
 			return (0);
 		}
 	}
-	else {
+	else if ($passwd) {
 		echo "Password doesn't match validation. Try again.";
 		return (0);
 	}

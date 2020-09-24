@@ -28,7 +28,7 @@
 </html>
 
 <?php
-	// include '../config/connect.php';
+	include 'config/connect.php';
 	include 'validation.php';
 	// session_start();
 
@@ -66,7 +66,6 @@
 					$set_reset_token = "UPDATE users SET reset = :reset WHERE user_id = :id;";
 					$stmt = $pdo->prepare($set_reset_token);
 					$stmt->execute(array(':reset' => $reset, ':id' => $id));
-					$stmt->close;
 					echo "Activation link sent to $email.";
 					header("refresh:5;url=index.php?page=account/login");
                 }
@@ -79,7 +78,7 @@
             }
         }
         catch (PDOException $e) {
-            echo "ERROR: " . getMessage($e);
+            echo "ERROR: " . $e->getMessage();
         }
     }
 

@@ -3,11 +3,12 @@
 
 	try {
 		$pdo = firstConnect();
+		$pdo->query("DROP DATABASE IF EXISTS camigru;");
 		$database = "CREATE DATABASE camigru; USE camigru;";
-		$pdo->exec($users . $images . $likes . $comments);
+		$pdo->exec($database);
 	}
 	catch (PDOException $e) {
-		echo 'ERROR: ' . $e->getMessage;
+		echo 'ERROR: ' . $e->getMessage();
 	}
 
 	$pdo = NULL;
@@ -55,5 +56,8 @@
 	catch (PDOException $e) {
 		echo 'ERROR: ' . $e->getMessage;
 	}
+
+	if (!file_exists('../images/'))
+		mkdir('../images');
 
 ?>

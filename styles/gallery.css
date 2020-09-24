@@ -212,9 +212,16 @@
 	overflow: scroll;
 }
 
-input[type=text], input[type=submit] {
+input[type=text] {
 	width: 90%;
 	margin: 5px;
+}
+
+input[type=submit] {
+	width: 90%;
+	max-width: 100px;
+	margin: 5px;
+	display: block;
 }
 
 #imageBox {

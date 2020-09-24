@@ -13,7 +13,7 @@
 		  echo json_encode($images);
 		}
 		catch (PDOException $e) {
-		  echo "Error: " . getMessage($e);
+		  echo "Error: " . $e->getMessage();
 		} 
 	}
 ?>

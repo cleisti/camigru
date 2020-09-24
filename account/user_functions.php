@@ -29,7 +29,7 @@
 			}
 		}
 		catch (PDOException $e) {
-			echo "ERROR: " . getMessage($e);
+			echo "ERROR: " . $e->getMessage();
 		}
 	}
 
@@ -52,7 +52,7 @@
 			mail($email, $subject, $content, $headers);
 		}
 		catch (PDOException $e) {
-			echo "ERROR: " . getMessage($e);
+			echo "ERROR: " . $e->getMessage();
 		}
 	}
 
@@ -83,7 +83,7 @@
             }
         }
         catch (PDOException $e) {
-            echo "ERROR: " . getMessage($e);
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -95,7 +95,7 @@
 			$stmt->execute(array(':email' => $new_email, ':zero' => 0, ':token' => $token, ':user' => $user));
 		}
 		catch (PDOException $e) {
-			echo "ERROR: " . getMessage($e);
+			echo "ERROR: " . $e->getMessage();
 		}
 		send_mail($new_email, $token, $pdo);
 	}
@@ -119,6 +119,9 @@
 					echo "Wrong password";
 					header("refresh:3;url=../index.php?page=profile");
 				}
+			}
+			else {
+				header("refresh:3;url=../index.php?page=profile");
 			}
 		}
 
@@ -160,6 +163,7 @@
 				}
 				else {
 					echo $mess;
+					header("refresh:3;url=../index.php?page=profile");
 				}
 			}
 			else {

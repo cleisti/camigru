@@ -1,5 +1,6 @@
 <?php
     include_once 'account/validation.php';
+    include_once 'config/connect.php';
 
     $username = $_SESSION['logged_user'];
     if (!$username || $username == "") {

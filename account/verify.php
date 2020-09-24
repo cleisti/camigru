@@ -7,7 +7,7 @@
 </html>
 
 <?php
-	// include 'config/connect.php';
+	include_once 'config/connect.php';
 
 	if (isset($_GET['token']) && isset($_GET['id'])) {
 
@@ -27,16 +27,15 @@
 							SET verified = :v, token = :zero
 							WHERE user_id = :id;";
 				$stmt = $pdo->prepare($validate);
-				$stmt->execute(array(':v' => 1, ':zero' => 0, ':id' => $id));
+				$stmt->execute(array(':v' => 2, ':zero' => 0, ':id' => $id));
 				echo "Validation successfull. You can <a href='index.php?page=account/login'>log in</a> now.";
-				// header("refresh5;url=index.php?page=account/login");
 			}
 			else {
 				echo "Unable to validate email.";
 			}
 		}
 		catch (PDOException $e) {
-			echo "ERROR: " . getMessage($e);
+			echo "ERROR: " . $e->getMessage();
 		}
 	}
 ?>

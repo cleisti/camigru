@@ -48,7 +48,7 @@
 			$hash = $res['password'];
 
 			if ($v === '0') {
-				echo "You haven't activated your account yet.<br>Follow the link that has been sent to your email or<br>send a new link.";
+				echo "You haven't activated your account yet.<br>Follow the link that has been sent to your email.";
 				return FALSE;
 			}
 			else if (!password_verify($passwd, $hash)) {
@@ -60,7 +60,7 @@
 			}
 		}
 		catch (PDOException $e) {
-			echo "ERROR: " . getMessage($e);
+			echo "ERROR: " . $e->getMessage();
 		}
 	}
 
@@ -88,7 +88,7 @@
 			}
 		}
 		else {
-			echo "<br><br>User " . $username . " doesn't exist.";
+			echo "Wrong username or password.";
 		}
 	}
 ?>

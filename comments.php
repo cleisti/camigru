@@ -25,7 +25,7 @@
             return $id;
         }
         catch (PDOException $e) {
-            console_log("Error: " . getMessage($e));
+            console_log("Error: " . $e->getMessage());
         }
 	}
 
@@ -58,7 +58,7 @@
 			$comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		catch (PDOException $e) {
-			echo "Error: " . getMessage($e);
+			echo "Error: " . $e->getMessage();
 		}
 		if ($comments) {
 			return $comments;
@@ -104,7 +104,7 @@
 					if ($res['verified'] == 2) {
 						$email = $res['mailAddr'];
 						$subject = "A new comment on you picture";
-						$content = $username . " commented on your image:<br><br>" . $comment;
+						$content = $username . " commented on your image: \n\n'" . $comment . "'";
 						$headers = 'From: admin@camigru.com' . "\r\n";
 						mail($email, $subject, $content, $headers);
 					}
@@ -117,7 +117,7 @@
 				}
 			}
 			catch (PDOException $e) {
-				echo "Error: " . getMessage($e);
+				echo "Error: " . $e->getMessage();
 			}
 		}
 		echo json_encode($json);

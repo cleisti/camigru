@@ -37,7 +37,7 @@
             echo "Image saved to gallery.";
         }
         catch (PDOException $e) {
-            echo "Error: " . getMessage($e);
+            echo "Error: " . $e->getMessage();
         }
 
     }
@@ -56,7 +56,7 @@
             return $id;
         }
         catch (PDOException $e) {
-            console_log("Error: " . getMessage($e));
+            console_log("Error: " . $e->getMessage());
         }
     }
 ?>

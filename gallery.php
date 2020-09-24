@@ -24,7 +24,7 @@
 		$res = $stmt->fetchALL(PDO::FETCH_ASSOC);
 	}
 	catch (PDOException $e) {
-		echo "Error: " . getMessage($e);
+		echo "Error: " . $e->getMessage();
 	}
 ?>
 

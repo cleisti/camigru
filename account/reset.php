@@ -15,6 +15,7 @@
 <?php
 
 	include_once 'validation.php';
+	include_once 'config/connect.php';
 
 	function	reset_password($reset_token, $id, $new_pw, $pdo) {
 		try {
@@ -38,7 +39,7 @@
 			}
 		}
 		catch (PDOException $e) {
-			echo "ERROR: " . getMessage($e);
+			echo "ERROR: " . $e->getMessage();
 		}
 	}
 

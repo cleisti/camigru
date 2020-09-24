@@ -40,6 +40,14 @@ var canvasData = null;
 			canvas.setAttribute('height', height);
 			streaming = true;
 		}
+
+		document.getElementById('save').addEventListener('click', function() {
+			save();
+		});
+		document.getElementById('new').addEventListener('click', function() {
+			newPicture();
+		});
+
 	  }, false);
   
 		startbutton.addEventListener('click', function(ev) {
@@ -71,6 +79,7 @@ function	takepicture() {
 		canvasData = canvas.toDataURL('image/png');
 
 		let newPhoto = document.createElement('img');
+		newPhoto.setAttribute('id', 'newPhoto');
 		newPhoto.setAttribute('width', width);
 		newPhoto.setAttribute('height', height);
 		newPhoto.setAttribute('src', canvasData)
@@ -84,15 +93,9 @@ function	takepicture() {
 		
 		let newBtn = document.getElementById('new');
 		newBtn.style.display = 'block';
-		newBtn.addEventListener('click', function() {
-			newPicture();
-		});
 
 		let saveBtn = document.getElementById('save');
 		saveBtn.style.display = 'block';
-		saveBtn.addEventListener('click', function() {
-			save();
-		});
 		index++;
 		document.getElementById('filters').style.display = 'none';
 	}
@@ -132,7 +135,6 @@ function	selectFilter(element) {
 
 function	save() {
 		let	filters;
-		let src;
 		let filter_images = document.querySelectorAll('#selectedFilters img');
 		filter_images.forEach(function(filter) {
 			let fil = filter.name + ',';
@@ -141,8 +143,6 @@ function	save() {
 			else
 				filters += fil;
 		})
-		src = encodeURIComponent(imgContainer.lastChild.src);
-		uploaded = (imgContainer.dataset.uploaded == 1) ? 1 : 0;
 		var xhttp = new XMLHttpRequest();
 		xhttp.open('POST', 'save.php', true);
 		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
@@ -151,7 +151,7 @@ function	save() {
 				load_images();
 			}
 		};
-		xhttp.send('filter=' + filters + '&image=' + canvasData + '&uploaded=' + uploaded);
+		xhttp.send('filter=' + filters + '&image=' + canvasData);
 		newPicture();
 }
 
@@ -160,6 +160,7 @@ function	newPicture() {
 	imgContainer.dataset.uploaded = 0;
 
 	document.getElementById('new').style.display = 'none';
+	document.getElementById('save').style.display = 'none';
 
 	document.getElementById('startbutton').style.display = 'block';
 
@@ -169,11 +170,6 @@ function	newPicture() {
 		selectFilter(filterId);
 	})
 
-	let saveBtn = document.getElementById('save')
-	saveBtn.removeEventListener('click', function(){
-		save()
-	});
-	saveBtn.style.display = 'none';
 	document.getElementById('filters').style.display = 'flex';
 }
 
@@ -196,14 +192,14 @@ function	remove_image(element) {
 function	uploadImageToCanvas(element) {
 	canvas.width = width;
 	canvas.height = height;
-	var img = new Image;
+	var img = new Image();
 	img.src = URL.createObjectURL(element.files[0]);
 	img.onload = function() {
 		canvas.getContext('2d').drawImage(img, 0, 0, width, height);
 		canvasData = canvas.toDataURL("image/png");
 	}
 
-	img.setAttribute('style', 'z-index: 1;'); // make a class
+	img.setAttribute('style', 'z-index: 1;');
 	img.setAttribute('width', width);
 	img.setAttribute('height', height);
 	imgContainer.appendChild(img);
@@ -211,15 +207,9 @@ function	uploadImageToCanvas(element) {
 
 	let newBtn = document.getElementById('new');
 	newBtn.style.display = 'block';
-	newBtn.addEventListener('click', function() {
-		newPicture();
-	});
 
 	let saveBtn = document.getElementById('save');
 	saveBtn.style.display = 'block';
-	saveBtn.addEventListener('click', function() {
-		save();
-	});
 }
 
 function	load_images() {
@@ -234,7 +224,7 @@ function	load_images() {
 			images.forEach(image => {
 				gallery.innerHTML += "<div class='card' style='margin: 5px; max-width: 150px;'>" +
 				"<img class='card-img-top' name='image' id='" + image.img_id +
-				"' src='" + image.path + "'><div class='remove' src='icons/trash' onclick='remove_image(this)'></div></div>";
+				"' src='" + image.path + "'><img class='remove' src='icons/trash.png' onclick='remove_image(this)'></div></div>";
 			})
 		}
 	};
