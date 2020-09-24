@@ -105,7 +105,7 @@ function	selectFilter(element) {
 	var imgContainer = document.getElementById('photo');
 	
 	if (element.dataset.clickcount == 0 && width && height) {
-		element.setAttribute('style', 'border: 2px solid black;');
+		element.setAttribute('style', 'border: 2px solid #0f005a;');
 		let selectedFilters = document.querySelector('#selectedFilters');
 		let filter = document.createElement('img');
 		filter.setAttribute('name', element.id);
