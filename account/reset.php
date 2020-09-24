@@ -3,12 +3,27 @@
 	<head>
 	</head>
 	<body>
+		<div class="d-flex p-2 justify-content-center align-content-around">
+		<table>
 		<form action="" method="post">
-			New password: <input type="password" name="new_pw" minlength="8" maxlength="20" value="" required />
-			<br />
-            Validate password: <input type="password" name="validate_pw" minlength="8" maxlength="20" value="" required />
-            <input class="button" type="submit" name="submit" value="Reset" />
-        </form>
+			<tr>
+				<th colspan="2" style="margin: 30px;">Log in</th>
+			</tr>
+			<tr>
+                <td>New password</td>
+                <td><input type="password" name="new_pw" minlength="8" maxlength="20" value="" required /></td>
+			</tr>
+			<tr>
+                <td>Validate password</td>
+                <td><input type="password" name="validate_pw" minlength="8" maxlength="20" value="" required /></td>
+			</tr>
+			<tr>
+                <td></td>
+                <td><input class="button" type="submit" name="submit" value="Reset" /></td>
+			</tr>
+		</form>
+		</table>
+	</div>
 	</body>
 </html>
 
@@ -16,6 +31,9 @@
 
 	include_once 'validation.php';
 	include_once 'config/connect.php';
+
+	if (!$_POST)
+		header("Location: index.php?page=account/login");
 
 	function	reset_password($reset_token, $id, $new_pw, $pdo) {
 		try {

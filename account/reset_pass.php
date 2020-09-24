@@ -4,7 +4,7 @@
 	</head>
 	<body>
 	<div class="d-flex p-2 justify-content-center align-content-around">
-	<table class="table-condensed table-responsive">
+	<table>
         <form action="" method="post" enctype="multipart/form-data">
             <tr>
 				<th colspan="2">Reset your password</th>
@@ -21,8 +21,8 @@
 				<td></td>
 				<td><input style="margin: 10px;" type="submit" name="send" value="Send" /></td>
 			</tr>
-	</form>
-</table>
+		</form>
+	</table>
 </div>
 	</body>
 </html>
