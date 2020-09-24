@@ -1,9 +1,19 @@
 <?php
-	include 'connect.php';
-	$pdo = connect();
+	include_once 'connect.php';
 
-	$database = "CREATE DATABASE IF NOT EXISTS camigru; USE camigru;";
+	try {
+		$pdo = firstConnect();
+		$database = "CREATE DATABASE camigru; USE camigru;";
+		$pdo->exec($users . $images . $likes . $comments);
+	}
+	catch (PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage;
+	}
 
+	$pdo = NULL;
+
+	try {
+		$pdo = connect();
 	$users = "CREATE TABLE IF NOT EXISTS users (
 		`user_id` INT NOT NULL AUTO_INCREMENT,
 		`email` VARCHAR(100) NOT NULL,
@@ -40,5 +50,10 @@
 		PRIMARY KEY (`comment_id`)
 	);";
 	
-	$pdo->exec($database . $users . $images . $likes . $comments);
+	$pdo->exec($users . $images . $likes . $comments);
+	}
+	catch (PDOException $e) {
+		echo 'ERROR: ' . $e->getMessage;
+	}
+
 ?>

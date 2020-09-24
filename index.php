@@ -1,5 +1,4 @@
 <?php
-	include 'config/setup.php';
 	session_start();
 
 	if (isset($_SESSION['logged_user']))
