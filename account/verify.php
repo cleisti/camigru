@@ -2,10 +2,10 @@
 <html>
 <head>
 </head>
-    <body>
-    </body>
-</html>
+    <body style="text-align: center;">
 
+	</body>
+</html>
 <?php
 	include_once 'config/connect.php';
 
@@ -39,3 +39,4 @@
 		}
 	}
 ?>
+

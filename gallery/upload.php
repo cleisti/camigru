@@ -1,6 +1,6 @@
 <?php
 include_once 'config/connect.php';
-session_start();
+// session_start();
 $username = $_SESSION['logged_user'];
 if (!$username || $username == "") {
     header('Location: index.php?page=account/login');
@@ -13,9 +13,7 @@ $id = $_SESSION['user_id'];
 <html>
 <head>
 	<meta charset='utf-8'>
-	<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script src="webcam.js">
+  <script src="scripts/webcam.js">
 	</script>
 </head>
 <body>

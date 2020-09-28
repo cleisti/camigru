@@ -16,7 +16,7 @@
 		likes.forEach(function(like) {
 			let id = like.id.substr(6);
 			let xhttp = new XMLHttpRequest();
-			xhttp.open('POST', 'likes.php', true);
+			xhttp.open('POST', 'gallery/likes.php', true);
 			xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 			xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhttp.onload = function () {
@@ -36,7 +36,7 @@
 		comments.forEach(function(comment) {
 			let id = comment.id.substr(9);
 			let xhttp = new XMLHttpRequest();
-			xhttp.open('POST', 'comments.php', true);
+			xhttp.open('POST', 'gallery/comments.php', true);
 			xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 			xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 			xhttp.onload = function () {
@@ -67,7 +67,7 @@ function	resize() {
 function	like(element) {
 	let img_id = element.name;
 	let xhttp = new XMLHttpRequest();
-	xhttp.open('POST', 'likes.php', true);
+	xhttp.open('POST', 'gallery/likes.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 	xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
@@ -100,7 +100,7 @@ function	comment(element) {
 	let comment = document.getElementById('newComment').value;
 	document.getElementById('newComment').value = "";
 	let xhttp = new XMLHttpRequest();
-	xhttp.open('POST', 'comments.php', true);
+	xhttp.open('POST', 'gallery/comments.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 	xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 	xhttp.onload = function () {
@@ -125,7 +125,7 @@ function	fetchAllComments(id) {
 	comments.innerHTML = "";
 
 	let xhttp = new XMLHttpRequest();
-	xhttp.open('POST', 'comments.php', true);
+	xhttp.open('POST', 'gallery/comments.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 	xhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 	xhttp.onload = function () {

@@ -12,47 +12,47 @@
 	position: absolute;
 	top: 0;
 	left: 0;
-  }
+}
   
-  #canvas {
+#canvas {
 	display:none;
-  }
+}
   
-  .camera {
+.camera {
 	width: 320px;
 	height: 300px;
 	position: relative;
 	display: flex;
 	flex-wrap: wrap;
 	margin: 10px auto;
-  }
+}
 
-  #photo {
-	  z-index: 1;
-	  position: absolute;
-	  display: inline-block;
-  }
+#photo {
+	z-index: 1;
+	position: absolute;
+	display: inline-block;
+}
 
-  #selectedFilters {
-	  z-index: 2;
-	  position: absolute;
-	  display: inline-block;
-  }
+#selectedFilters {
+	z-index: 2;
+	position: absolute;
+	display: inline-block;
+}
 
-  #save {
-	  display: none;
-  }
+#save {
+	display: none;
+}
 
-  #new {
-	  display: none;
-  }
+#new {
+	display: none;
+}
 
-  #buttons {
-	  width: 100%;
-	  align-self: flex-end;
-  }
+#buttons {
+	width: 100%;
+	align-self: flex-end;
+}
   
-  .contentarea {
+.contentarea {
 	font-size: 16px;
 	font-family: "Lucida Grande", "Arial", sans-serif;
 	width: 760px;
@@ -60,9 +60,9 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-  }
+}
 
-  #filters {
+#filters {
 	width: 320px;
 	max-height: 70px;
 	overflow: scroll;
@@ -70,6 +70,7 @@
 	flex-wrap: nowrap;
 	margin: 10px auto;
 }
+
 .filter {
 	width: 20%;
 	height: auto;
@@ -78,15 +79,15 @@
 ::-webkit-scrollbar {
 	-webkit-appearance: none;
 	width: 10px;
-  }
+}
   
-  ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 	border-radius: 5px;
 	background-color: rgba(0,0,0,.5);
 	-webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
-  }
+}
 
-  @media only screen and (max-width: 739px) {
+@media only screen and (max-width: 739px) {
 	#output {
 		position: relative;
 		overflow: scroll;
@@ -95,35 +96,35 @@
 		display: flex;
 		flex-wrap: nowrap;
 		flex-direction: row;
-	  }
-  }
+	}
+}
 
-  @media only screen and (min-width: 740px) {
+@media only screen and (min-width: 740px) {
 	#output {
 		position: relative;
 		overflow: scroll;
 		max-height: 300px;
 		width: 180px;
-	  }
-  }
+	}
+}
 
-  .gallery {
-	  display: flex;
-	  max-width: 750px;
-	  flex-flow: row wrap;
-	  justify-content: center;
-  }
+.gallery {
+	display: flex;
+	max-width: 750px;
+	flex-flow: row wrap;
+	justify-content: center;
+}
 
-  .image_div {
-	  min-width: 100px;
-	  max-width: 250px;
-	  position: relative;
-	  padding: 5px;
-  }
+.image_div {
+	min-width: 100px;
+	max-width: 250px;
+	position: relative;
+	padding: 5px;
+}
 
-  .gallery_img {
-	  max-width: 100px;
-  }
+.gallery_img {
+	max-width: 100px;
+}
 
 .remove {
 	background-color: salmon;
@@ -254,7 +255,6 @@ input[type=submit] {
 
 .pagination {
 	display: block !important;
-	width: 100%;
 }
 
 .pagination li {
@@ -269,6 +269,7 @@ input[type=submit] {
 table th {
 	height: 50px;
 }
+
 .switch {
 	position: relative;
 	display: inline-block;
@@ -280,6 +281,7 @@ table th {
 	width: 0;
 	height: 0;
 }
+
 .slider {
 position: absolute;
 cursor: pointer;
@@ -303,6 +305,7 @@ background-color: white;
 -webkit-transition: .4s;
 transition: .4s;
 }
+
 input:checked + .slider {
 background-color: #0f005a;
 }

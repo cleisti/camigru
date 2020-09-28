@@ -39,58 +39,33 @@
 <?php
     include_once 'config/connect.php';
     include_once 'account/validation.php';
-    // session_start();
-
-    function    send_mail($email, $token, $pdo) {
-        try {
-            $get_id = "SELECT user_id FROM users
-                    WHERE email = :email LIMIT 1;";
-            $stmt = $pdo->prepare($get_id);
-            $stmt->execute(array(':email' => $email));
-            $res = $stmt->fetch(PDO::FETCH_ASSOC);
-            $id = $res['user_id'];
-
-            if ($id) {
-                $url = 'http://localhost:8080/camigru/index.php?page=account/verify&token=' . $token .'&id=' . $id;
-                $subject = "Activate your account at Camigru";
-                $content = "Click this link to activate your account: " . $url;
-                $headers = 'From: admin@camigru.com' . "\r\n";
-                if (mail($email, $subject, $content, $headers)) {
-                    return TRUE;
-                }
-                else {
-                    echo "Unable to send activation email.";
-                    return FALSE;
-                }
-            }
-            else {
-                echo "Unable to fetch user_id";
-            }
-        }
-        catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
-        }
-    }
 
     function    create_user($email, $username, $passwd, $pdo) {
 
         try {
-        $hashed = password_hash($passwd, PASSWORD_DEFAULT);
-        $token = bin2hex(openssl_random_pseudo_bytes(16));
-        $insert_user = "INSERT INTO users(`email`, `username`, `password`, `token`)
-                    VALUES (:email, :username, :password, :token);";
-        $stmt = $pdo->prepare($insert_user);
-        $stmt->execute(array(':email' => $email, ':username' => $username, ':password' => $hashed, ':token' => $token));
+            $hashed = password_hash($passwd, PASSWORD_DEFAULT);
+            $token = bin2hex(openssl_random_pseudo_bytes(16));
+            $insert_user = "INSERT INTO users(`email`, `username`, `password`, `token`)
+                            VALUES (:email, :username, :password, :token);";
+            $stmt = $pdo->prepare($insert_user);
+            $stmt->execute(array(':email' => $email, ':username' => $username, ':password' => $hashed, ':token' => $token));
+
+            $id = fetch_uId($username);
+            $url = 'http://localhost:8080/camigru/index.php?page=account/verify&token=' . $token .'&id=' . $id;
+            $message = "Click this link to activate your account at Camigru: " . $url;
+            $subject = "Activate your account at Camigru";
+            $headers = 'From: admin@camigru.com' . "\r\n";
+            if (mail($email, $subject, $message, $headers))
+                return TRUE;
+            else
+                return FALSE;
         }
         catch (PDOException $e) {
             echo "ERROR: " . $e->getMessage();
         }
-        if (send_mail($email, $token, $pdo)) {
-            echo "Activation email sent to $email. Follow the link to activate your account.";
-        }
     }
 
-    if ($_POST && $_POST['submit'] && $_POST['email'] && $_POST['login'] && $_POST['passwd'] && $_POST['validate_pw']) {
+    if ($_POST && $_POST['submit'] === 'Create') {
         
         $pdo = connect();
         $submit = $_POST['submit'];
@@ -101,7 +76,10 @@
 
         if (!$mess = user_exists($email, $username, $pdo)) {
             if (input_is_valid($email, $username, $passwd, $validate_pw)) {
-                create_user($email, $username, $passwd, $pdo);
+                if (create_user($email, $username, $passwd, $pdo))
+                    echo "Your account has been created. Follow the activation link that has been sent to your email.";
+                else
+                    echo "Something went wrong with sending email. Please contact support at admin@camigru.";
                 unset($_POST);
             }
         }

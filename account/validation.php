@@ -1,24 +1,38 @@
 <?php
-// include_once 'config/connect.php';
+// include 'config/connect.php';
 
 function    fetch_email($username) {
 	$pdo = connect();
-	$fetch_email = "SELECT email FROM users WHERE username = :username;";
-	$stmt = $pdo->prepare($fetch_email);
+	$query = "SELECT email FROM users WHERE username = :username;";
+	$stmt = $pdo->prepare($query);
 	$stmt->execute(array(':username' => $username));
 	$res = $stmt->fetch(PDO::FETCH_ASSOC);
 	$email = $res['email'];
+
 	return ($email);
 }
 
-function    user_exists($email, $username, $pdo) {
+function	fetch_uId($username) {
+	$pdo = connect();
+
+	$query = "SELECT user_id FROM users WHERE username = :username;";
+	$stmt = $pdo->prepare($query);
+	$stmt->execute(array(':username' => $username));
+	$res = $stmt->fetch(PDO::FETCH_ASSOC);
+	$id = $res['user_id'];
+
+	return $id;
+}
+
+function    user_exists($email, $username) {
+
+	$pdo = connect();
 	
 	if ($email) {
 		try {
-			$check_email = "SELECT email FROM users
+			$query = "SELECT email FROM users
 					WHERE email = :email;";
-
-			$stmt = $pdo->prepare($check_email);
+			$stmt = $pdo->prepare($query);
 			$stmt->execute(array(':email' => $email));
 			$res = $stmt->fetch();
 		}
@@ -32,10 +46,9 @@ function    user_exists($email, $username, $pdo) {
 	
 	if ($username) {
 		try {
-			$check_user = "SELECT username FROM users
+			$query = "SELECT username FROM users
 					WHERE username = :username;";
-
-			$stmt = $pdo->prepare($check_user);
+			$stmt = $pdo->prepare($query);
 			$stmt->execute(array(':username' => $username));
 			$res = $stmt->fetch();
 		}
@@ -61,7 +74,7 @@ function    input_is_valid($email, $username, $passwd, $validate_pw) {
 		return (0);
 	}
 
-	if ($passwd && $passwd === $validate_pw) {
+	if ($passwd && strcmp($passwd, $validate_pw) === 0) {
 		if (!preg_match('/^(?=.*\d)(?=.*[a-zA-Z])/', $passwd)) {
 			echo "Password must contain at least one alphabetical character and one number.";
 			return (0);
@@ -73,15 +86,4 @@ function    input_is_valid($email, $username, $passwd, $validate_pw) {
 	}
 	return (1);
 }
-
-function	fetch_uId($username) {
-	$pdo = connect();
-	$get_id = "SELECT user_id FROM users WHERE username = :username;";
-	$stmt = $pdo->prepare($get_id);
-	$stmt->execute(array(':username' => $username));
-	$res = $stmt->fetch(PDO::FETCH_ASSOC);
-	$id = $res['user_id'];
-	return $id;
-}
-
 ?>

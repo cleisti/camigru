@@ -1,5 +1,5 @@
 <?php
-    include_once 'config/connect.php';
+    include_once '../config/connect.php';
     session_start();
 
     $username = $_SESSION['logged_user'];
@@ -16,13 +16,13 @@
     $img_base64 = str_replace(' ', '+', $img_base64);
     $img_data = base64_decode($img_base64);
 
-    if (file_put_contents($path, $img_data)) {
+    if (file_put_contents('../' . $path, $img_data)) {
         foreach ($filters as $filter) {
-            $dest = imagecreatefrompng($path);
-            $f = imagecreatefrompng('filters/' . $filter . '.png');
+            $dest = imagecreatefrompng('../' . $path);
+            $f = imagecreatefrompng('../filters/' . $filter . '.png');
             imagecopyresampled($dest, $f, 0, 0, 0, 0, imagesx($dest), imagesy($dest), imagesx($f), imagesy($f));
             header('Content-Type: image/png');
-            imagepng($dest, $path);
+            imagepng($dest, '../' . $path);
             imagedestroy($dest);
             imagedestroy($f);
         }

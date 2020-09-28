@@ -3,7 +3,7 @@
 	// ini_set('display_errors', 'On');
 	// set_error_handler("var_dump");
 
-	include_once 'config/connect.php';
+	include_once '../config/connect.php';
 	session_start();
 	$username = $_SESSION['logged_user'];
 

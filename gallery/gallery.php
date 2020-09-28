@@ -32,9 +32,7 @@
 <html lang="en">
 <head>
 	<meta charset='utf-8' name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="styles/gallery.css" type="text/css" media="all">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="galleryfeatures.js"></script>
+	<script src="scripts/galleryfeatures.js"></script>
 </head>
 <body>
 	<div class="d-inline-flex p-2 flex-wrap justify-content-center align-content-around" id="gallery">

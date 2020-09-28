@@ -1,5 +1,5 @@
 <?php
-	include_once 'config/connect.php';
+	include_once '../config/connect.php';
 	session_start();
 	$id = $_SESSION['user_id'];
 

@@ -1,5 +1,5 @@
 <?php
-	include_once 'config/connect.php';
+	include_once '../config/connect.php';
 	session_start();
 	if (isset($_SESSION['logged_user']))
 		$username = $_SESSION['logged_user'];

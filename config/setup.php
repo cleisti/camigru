@@ -15,7 +15,7 @@
 
 	try {
 		$pdo = connect();
-	$users = "CREATE TABLE IF NOT EXISTS users (
+		$users = "CREATE TABLE IF NOT EXISTS users (
 		`user_id` INT NOT NULL AUTO_INCREMENT,
 		`email` VARCHAR(100) NOT NULL,
 		`username` VARCHAR(25) NOT NULL,
@@ -25,7 +25,7 @@
 		`reset` VARCHAR(255) DEFAULT NULL,
 		`profile_pic` VARCHAR(255) NOT NULL DEFAULT '0',
 		PRIMARY KEY (`user_id`)
-	);";
+		);";
 
 	$images = "CREATE TABLE IF NOT EXISTS images (
 		`img_id` INT NOT NULL AUTO_INCREMENT,

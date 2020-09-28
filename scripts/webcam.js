@@ -144,7 +144,7 @@ function	save() {
 				filters += fil;
 		})
 		var xhttp = new XMLHttpRequest();
-		xhttp.open('POST', 'save.php', true);
+		xhttp.open('POST', 'gallery/save.php', true);
 		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 		xhttp.onload = function() {
 			if (xhttp.status == 200) {
@@ -179,7 +179,7 @@ function	remove_image(element) {
 	let image = images[0];
 	alert("Remove image?");
 	var xhttp = new XMLHttpRequest();
-	xhttp.open('POST', 'remove.php', true);
+	xhttp.open('POST', 'gallery/remove.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 	xhttp.onload = function() {
 		if (xhttp.status == 200) {
@@ -214,7 +214,7 @@ function	uploadImageToCanvas(element) {
 
 function	load_images() {
 	let xhttp = new XMLHttpRequest();
-	xhttp.open('POST', 'getimages.php', true);
+	xhttp.open('POST', 'gallery/getimages.php', true);
 	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
 	xhttp.onload = function () {
 		if (xhttp.status == 200) {
