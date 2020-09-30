@@ -6,8 +6,8 @@
 	if ($_POST['get_images']) {
 		try {
 		  $pdo = connect();
-		  $fetch_images = "SELECT * FROM images WHERE img_user_id = :user_id ORDER BY created DESC;";
-		  $stmt = $pdo->prepare($fetch_images);
+		  $query = "SELECT * FROM images WHERE img_user_id = :user_id ORDER BY created DESC;";
+		  $stmt = $pdo->prepare($query);
 		  $stmt->execute(array(':user_id' => $id));
 		  $images = $stmt->fetchALL(PDO::FETCH_ASSOC);
 		  echo json_encode($images);

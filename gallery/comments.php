@@ -4,9 +4,9 @@
 	// set_error_handler("var_dump");
 
 	include_once '../config/connect.php';
-	session_start();
+	if (!isset($_SESSION))
+		session_start();
 	$username = $_SESSION['logged_user'];
-
 	$json = array();
 
 	function is_ajax_request() {

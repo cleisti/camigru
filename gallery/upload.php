@@ -1,11 +1,9 @@
 <?php
 include_once 'config/connect.php';
-// session_start();
 $username = $_SESSION['logged_user'];
 if (!$username || $username == "") {
     header('Location: index.php?page=account/login');
 }
-$id = $_SESSION['user_id'];
 
 ?>
 

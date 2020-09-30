@@ -3,7 +3,6 @@
 <head>
 </head>
     <body style="text-align: center;">
-
 	</body>
 </html>
 <?php
@@ -13,8 +12,8 @@
 
 		$pdo = connect();
 
-		$token = filter_var($_GET['token'], FILTER_SANITIZE_STRING);
-		$id = filter_var($_GET['id'], FILTER_SANITIZE_STRING);
+		$token = $_GET['token'];
+		$id = $_GET['id'];
 
 		try {
 			$get_user = "SELECT user_id, token FROM users WHERE user_id = :id AND token = :token;";

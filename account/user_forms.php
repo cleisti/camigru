@@ -28,8 +28,6 @@ else if ($_POST['submit'] === "ChangeUsername") {
 	$info['user'] = $user['username'];
 	$info['new_un'] = $_POST['new_un'];
 	$info['email'] = $user['email'];
-
-	// echo $user;
 	
 	$mess = update_username($info);
 

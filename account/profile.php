@@ -5,8 +5,6 @@
         header('Location: index.php?page=account/logout');
     }
 
-    // $user = get_user($_SESSION['logged_user']);
-
 ?>
 
 <!DOCTYPE html>

@@ -28,14 +28,15 @@
 </html>
 
 <?php
-
-	include_once 'validation.php';
 	include_once 'config/connect.php';
+	include_once 'validation.php';
 
 	if (!$_GET)
 		header("Location: index.php?page=account/login");
 
-	function	reset_password($reset_token, $id, $new_pw, $pdo) {
+	function	reset_password($reset_token, $id, $new_pw) {
+		$pdo = connect();
+
 		try {
 			$validate_token = "SELECT reset FROM users WHERE user_id = :id;";
 			$stmt = $pdo->prepare($validate_token);
@@ -68,12 +69,8 @@
 		$new_pw = $_POST['new_pw'];
 		$validate_pw = $_POST['validate_pw'];
 
-		if ($new_pw !== $validate_pw) {
-			echo "Password doesn't match validation.";
-		}
-		else if (input_is_valid(NULL, NULL, $new_pw, $validate_pw)) {
-			$pdo = connect();
-			reset_password($reset_token, $id, $new_pw, $pdo);
+		if (input_is_valid(NULL, NULL, $new_pw, $validate_pw)) {
+			reset_password($reset_token, $id, $new_pw);
 		}
 	}
 ?>

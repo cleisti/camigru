@@ -3,6 +3,7 @@
     session_start();
 
     $username = $_SESSION['logged_user'];
+    $user_id = $_SESSION['user_id'];
 
     $img = $_POST['image'];
     $filters =  $_POST['filter'];
@@ -29,11 +30,10 @@
 
         try {
             $pdo = connect();
-            $id = get_id($username, $pdo);
         
             $insert_pic = "INSERT INTO images(`img_user_id`, `path`, `created`) VALUES (:id, :path, :date)";
             $stmt = $pdo->prepare($insert_pic);
-            $stmt->execute(array(':id' => $id, ':path' => $path, ':date' => date('Y-m-d H:i:s')));
+            $stmt->execute(array(':id' => $user_id, ':path' => $path, ':date' => date('Y-m-d H:i:s')));
             echo "Image saved to gallery.";
         }
         catch (PDOException $e) {
@@ -41,22 +41,5 @@
         }
 
     }
-
     unset($_POST);
-  
-
-    function    get_id($username, $pdo) {
-        try {
-            $get_id = "SELECT user_id FROM users WHERE username = :username;";
-            $stmt = $pdo->prepare($get_id);
-            $stmt->execute(array(':username' => $username));
-            $res = $stmt->fetch(PDO::FETCH_ASSOC);
-            $id = $res['user_id'];
-
-            return $id;
-        }
-        catch (PDOException $e) {
-            console_log("Error: " . $e->getMessage());
-        }
-    }
 ?>

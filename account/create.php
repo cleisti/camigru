@@ -40,7 +40,8 @@
     include_once 'config/connect.php';
     include_once 'account/validation.php';
 
-    function    create_user($email, $username, $passwd, $pdo) {
+    function    create_user($email, $username, $passwd) {
+        $pdo = connect();
 
         try {
             $hashed = password_hash($passwd, PASSWORD_DEFAULT);
@@ -50,7 +51,7 @@
             $stmt = $pdo->prepare($insert_user);
             $stmt->execute(array(':email' => $email, ':username' => $username, ':password' => $hashed, ':token' => $token));
 
-            $id = fetch_uId($username);
+            $id = fetch_uId($email);
             $url = 'http://localhost:8080/camigru/index.php?page=account/verify&token=' . $token .'&id=' . $id;
             $message = "Click this link to activate your account at Camigru: " . $url;
             $subject = "Activate your account at Camigru";
@@ -67,19 +68,18 @@
 
     if ($_POST && $_POST['submit'] === 'Create') {
         
-        $pdo = connect();
         $submit = $_POST['submit'];
         $email = $_POST['email'];
         $username = $_POST['login'];
         $passwd = $_POST['passwd'];
         $validate_pw = $_POST['validate_pw'];
 
-        if (!$mess = user_exists($email, $username, $pdo)) {
+        if (!$mess = user_exists($email, $username)) {
             if (input_is_valid($email, $username, $passwd, $validate_pw)) {
-                if (create_user($email, $username, $passwd, $pdo))
+                if (create_user($email, $username, $passwd))
                     echo "Your account has been created. Follow the activation link that has been sent to your email.";
                 else
-                    echo "Something went wrong with sending email. Please contact support at admin@camigru.";
+                    echo "Couldn't send verification email. Please contact support at admin@camigru.";
                 unset($_POST);
             }
         }

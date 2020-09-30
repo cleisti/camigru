@@ -34,9 +34,10 @@
 <?php
 	include_once 'config/connect.php';
 	include_once 'validation.php';
-	// session_start();
 
-	function    auth($username, $passwd, $pdo) {
+	function    auth($username, $passwd) {
+		$pdo = connect();
+
 		try {
 			$get_hash = "SELECT `password`, `verified` FROM users
 						WHERE username = :username;";
@@ -64,7 +65,9 @@
 		}
 	}
 
-	function	get_user_id($username, $pdo) {
+	function	get_user_id($username) {
+		$pdo = connect();
+
 		$get_id = "SELECT `user_id` FROM users WHERE username = :username;";
 		$stmt = $pdo->prepare($get_id);
 		$stmt->execute(array(':username' => $username));
@@ -74,16 +77,14 @@
 	}
 
 	if ($_POST && $_POST['connect'] === 'Log in' && isset($_POST['login']) && isset($_POST['passwd'])) {
-		
-		$pdo = connect();
 
 		$username = $_POST['login'];
 		$passwd = $_POST['passwd'];
 
-		if (user_exists(NULL, $username, $pdo)) {
-			if (auth($username, $passwd, $pdo) === TRUE) {
+		if (user_exists(NULL, $username)) {
+			if (auth($username, $passwd) === TRUE) {
 				$_SESSION['logged_user'] = $username;
-				$_SESSION['user_id'] = get_user_id($username, $pdo);
+				$_SESSION['user_id'] = get_user_id($username);
 				header("Location: index.php");
 			}
 		}

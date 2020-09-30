@@ -177,16 +177,17 @@ function	remove_image(element) {
 	let parent = element.parentNode;
 	let images = parent.getElementsByTagName('img');
 	let image = images[0];
-	alert("Remove image?");
-	var xhttp = new XMLHttpRequest();
-	xhttp.open('POST', 'gallery/remove.php', true);
-	xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
-	xhttp.onload = function() {
-		if (xhttp.status == 200) {
-			load_images();
-		}
-	};
-	xhttp.send('img_id=' + image.id);
+	if (confirm("Remove image?")) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.open('POST', 'gallery/remove.php', true);
+		xhttp.setRequestHeader('Content-type', 'Application/x-www-form-urlencoded');
+		xhttp.onload = function() {
+			if (xhttp.status == 200) {
+				load_images();
+			}
+		};
+		xhttp.send('img_id=' + image.id);
+	}
 }
 
 function	uploadImageToCanvas(element) {
