@@ -25,7 +25,7 @@ I didn't put on much work on the layout of the project, most of the CSS is boots
 
 A user must be able to sign up by adding a valid email, username and a password with a minimum level of complexity. The user must verify the account through a unique link sent to the email.
 
-<hr></hr>
+
 ![Login](screenshots/login.png)
 
 Only after verification can the user log in. Also in case of a forgotten password, the user must be able to send a password-reinitialisation link to their email.
