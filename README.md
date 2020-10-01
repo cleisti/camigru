@@ -28,29 +28,24 @@ A user must be able to sign up by adding a valid email, username and a password 
 <hr></hr>
 
 ![Login](screenshots/login.png)
-
 Only after verification can the user log in. Also in case of a forgotten password, the user must be able to send a password-reinitialisation link to their email.
 
 <hr></hr>
 
 ![Profile page](screenshots/profile.png)
-
 On the profile section, the user must be able to modify the username, email-adress and password, as well as the setting to receive notifications to the email address when a new comment is received on an image.
 
 <hr></hr>
 
 ![Creation page](screenshots/create.png)
-
 On the creation page, the user must be able to take pictures with their webcam, add one or more filters and save the image. They also need to be able to upload an image if they, for example don't have a webcam. The superposing of the images is done completely server-side, in PHP. On this page, the user is also able to delete their own images.
 
 <hr></hr>
 
 ![Gallery page](screenshots/gallery.png)
-
 On the gallery page, all images by all users are shown, in a descending order by creation. Logged in users are able to like and comment on the images.
 
 <hr></hr>
 
 ![Image Lightbox](screenshots/lightbox.png)
-
 When clicking on the image or the comment icon, a lightbox will open up, showing the comment field and all the comments on the image. If a user is logged in, they will be able to submit a comment here.
