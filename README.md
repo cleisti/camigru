@@ -31,6 +31,7 @@ A user must be able to sign up by adding a valid email, username and a password 
 Only after verification can the user log in. Also in case of a forgotten password, the user must be able to send a password-reinitialisation link to their email.
 
 <hr></hr>
+
 ![Profile page](screenshots/profile.png)
 
 On the profile section, the user must be able to modify the username, email-adress and password, as well as the setting to receive notifications to the email address when a new comment is received on an image.
