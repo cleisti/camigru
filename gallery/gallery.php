@@ -64,7 +64,7 @@
 
 		$pagLink = "<ul class='pagination'>";
 			for ($i = 1; $i <= $total_pages; $i++) {
-				$pagLink .= "<li class='page-item'><a class='page-link' href='index.php?page=gallery&gallery_page=".$i."'>".$i."</a></li>";
+				$pagLink .= "<li class='page-item'><a class='page-link' href='index.php?page=gallery/gallery&gallery_page=".$i."'>".$i."</a></li>";
 			}
 			echo $pagLink . "</ul>";
 		?>
