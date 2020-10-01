@@ -16,4 +16,4 @@ Some comments that I got for possible <u>improvement</u> were
 - variables for server URLs
 - adding some demo users with seed data right att setup
 
-![Create User](screenshots/createUser)
+![Create User](screenshots/createUser.png)
