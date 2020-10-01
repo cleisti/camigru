@@ -1,6 +1,6 @@
 # camigru :camera_flash:
 
-## An instagram/snapchat like web-app
+### An instagram/snapchat like web-app
 
 The idea with the project was to learn the basics of creating a web-app for which users can sign up, upload and create content and modify their own settings. Languages allowed for the project were
 - HTML
